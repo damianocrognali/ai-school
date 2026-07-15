@@ -389,11 +389,6 @@ const ROUNDS = [
   tileDesc:"Il formato dove i ragazzi incontrano l'AI ogni giorno.",
   intro:"Il round oggi più importante: è il formato che i ragazzi consumano ogni giorno. Tutti i video si trovano su YouTube/TikTok con la ricerca indicata (i link diretti compaiono dopo la rivelazione).",
   items:[
-  { title:"Will Smith mangia spaghetti (2023 vs 2025)",
-    desc:"Il video-simbolo degli orrori AI del 2023, confrontato con le versioni realistiche del 2025.",
-    cerca:"Will Smith spaghetti AI 2023 vs 2025", answer:"AI",
-    indizi:"Apri il round così: due anni di progresso in 30 secondi.",
-    disc:"Gli indizi visivi hanno una data di scadenza." },
   { title:"Coniglietti sul trampolino (luglio 2025)",
     desc:"Finto video di videosorveglianza notturna: oltre 230 milioni di visualizzazioni su TikTok, ha ingannato mezzo internet.",
     cerca:"bunnies trampoline AI", answer:"AI",
@@ -579,7 +574,7 @@ function renderCard(r,i){
         <h2 class="ex-title">${it.title}</h2>
         ${it.desc ? `<p class="ex-desc">${it.desc}</p>` : ""}
         ${it.poem ? `<div class="poem">${esc(it.poem)}${it.poemTr?`<span class="tr">${esc(it.poemTr)}</span>`:""}</div>` : ""}
-        ${it.cerca ? `<div class="cerca">🔎 Cerca: <b>${esc(it.cerca)}</b></div>` : ""}
+        ${it.cerca ? `<div class="cerca">🔎 Per chi conduce (da preparare prima) — cerca: <b>${esc(it.cerca)}</b></div>` : ""}
         <div class="vote-strip">
           <span class="label">La classe vota</span>
           <span class="vote-opt o-ai">${R.opts[0]}</span><span class="vote-vs">vs</span>

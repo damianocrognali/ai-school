@@ -1,0 +1,291 @@
+<title>AI o NON AI? — Sfida rapida</title>
+<style>
+  :root{
+    --bg:#0f1320; --surface:#181e30; --surface2:#20273f; --line:#2c3450;
+    --ink:#eef1fa; --muted:#9aa2bc; --faint:#6b7391;
+    --acc:#ffc933; --acc-ink:#1a1405; --acc-dim:#b78d1a;
+    --v-ai:#c18cff; --v-ai-bg:rgba(193,140,255,.13);
+    --v-real:#3ddc97; --v-real-bg:rgba(61,220,151,.12);
+    --shadow:0 18px 50px rgba(4,6,14,.55);
+    --mono:ui-monospace,'SF Mono','Cascadia Mono','Segoe UI Mono',Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: light){
+    :root{--bg:#f2f4fa;--surface:#fff;--surface2:#eaedf6;--line:#d7dcec;--ink:#161b2c;--muted:#5b6380;--faint:#8b92ad;
+      --acc:#ffc933;--acc-ink:#1a1405;--acc-dim:#8a6a00;
+      --v-ai:#7a3ff2;--v-ai-bg:rgba(122,63,242,.09);--v-real:#0c9e63;--v-real-bg:rgba(12,158,99,.09);
+      --shadow:0 14px 40px rgba(22,27,44,.14)}
+  }
+  :root[data-theme="dark"]{--bg:#0f1320;--surface:#181e30;--surface2:#20273f;--line:#2c3450;--ink:#eef1fa;--muted:#9aa2bc;--faint:#6b7391;
+    --acc:#ffc933;--acc-ink:#1a1405;--acc-dim:#b78d1a;
+    --v-ai:#c18cff;--v-ai-bg:rgba(193,140,255,.13);--v-real:#3ddc97;--v-real-bg:rgba(61,220,151,.12);
+    --shadow:0 18px 50px rgba(4,6,14,.55)}
+  :root[data-theme="light"]{--bg:#f2f4fa;--surface:#fff;--surface2:#eaedf6;--line:#d7dcec;--ink:#161b2c;--muted:#5b6380;--faint:#8b92ad;
+    --acc:#ffc933;--acc-ink:#1a1405;--acc-dim:#8a6a00;
+    --v-ai:#7a3ff2;--v-ai-bg:rgba(122,63,242,.09);--v-real:#0c9e63;--v-real-bg:rgba(12,158,99,.09);
+    --shadow:0 14px 40px rgba(22,27,44,.14)}
+
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer}
+  button:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc-dim);font-weight:600}
+  .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
+
+  .shell{min-height:100vh;display:flex;flex-direction:column}
+  .topbar{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:20}
+  .topbar .tt{font-weight:800;font-size:.95rem;white-space:nowrap}
+  .dots{display:flex;gap:.42rem;flex:1;justify-content:center;flex-wrap:wrap}
+  .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--faint);background:transparent;padding:0}
+  .dot.done{background:var(--faint);border-color:var(--faint)}
+  .dot.cur{border-color:var(--acc);background:var(--acc)}
+
+  .btn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;padding:.5rem .95rem;font-size:.88rem;font-weight:600}
+  .btn:hover{border-color:var(--acc)}
+  .btn-acc{background:var(--acc);color:var(--acc-ink);border:none;font-weight:800}
+  .btn-acc:hover{filter:brightness(1.06)}
+
+  .stage{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1.2rem 7.5rem}
+  .card{width:100%;max-width:860px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:2.4rem 2.6rem 2.6rem}
+  @media (max-width:640px){.card{padding:1.6rem 1.3rem 2rem}}
+  .q-title{font-size:clamp(1.7rem,4.5vw,2.5rem);font-weight:900;letter-spacing:-.025em;line-height:1.08;margin:.5rem 0 .9rem;text-wrap:balance}
+  .q-desc{font-size:1.06rem;color:var(--muted);max-width:62ch;margin:0 0 1.1rem}
+
+  .poem{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.5rem,3.6vw,2.1rem);line-height:1.5;background:var(--surface2);border-radius:14px;padding:1.6rem 2rem;margin:0 0 1.2rem;white-space:pre-line;font-style:italic}
+
+  .show-link{display:inline-flex;align-items:center;gap:.7rem;background:var(--acc);color:var(--acc-ink);text-decoration:none;
+    font-weight:900;font-size:1.15rem;border-radius:14px;padding:1rem 1.6rem;margin:0 0 1.2rem}
+  .show-link:hover{filter:brightness(1.06)}
+  .show-link small{font-weight:600;font-size:.75rem;opacity:.75}
+
+  .vote-strip{display:flex;align-items:center;gap:.8rem;margin-top:1rem;flex-wrap:wrap}
+  .vote-opt{font-weight:900;font-size:1.15rem;letter-spacing:.04em;padding:.45rem 1.1rem;border-radius:10px;border:2px solid}
+  .o-ai{color:var(--v-ai);border-color:var(--v-ai);background:var(--v-ai-bg)}
+  .o-real{color:var(--v-real);border-color:var(--v-real);background:var(--v-real-bg)}
+  .vote-vs{font-family:var(--mono);color:var(--faint);font-size:.8rem}
+
+  .timer{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem;margin-left:auto;
+    border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--ink);padding:.45rem .9rem;min-width:6.5rem}
+  .timer.run{border-color:var(--acc);color:var(--acc-dim)}
+  .timer.zero{border-color:var(--v-ai);color:var(--v-ai)}
+
+  .reveal{margin-top:1.6rem;border-top:1px solid var(--line);padding-top:1.5rem}
+  .stamp{display:inline-block;font-size:clamp(2rem,6vw,3.2rem);font-weight:900;line-height:1;padding:.35em .5em;border:5px solid;border-radius:14px;
+    transform:rotate(-4deg);animation:stampIn .28s cubic-bezier(.2,1.6,.4,1) both;margin-bottom:1rem}
+  @keyframes stampIn{from{transform:rotate(-14deg) scale(2.1);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:reduce){.stamp{animation:none}}
+  .stamp.v-ai{color:var(--v-ai);border-color:var(--v-ai);background:var(--v-ai-bg)}
+  .stamp.v-real{color:var(--v-real);border-color:var(--v-real);background:var(--v-real-bg)}
+  .reveal-block{background:var(--surface2);border-radius:12px;padding:1rem 1.2rem;margin-top:.8rem}
+  .reveal-block .label{display:block;margin-bottom:.3rem}
+  .reveal-block p{margin:0;font-size:1rem}
+  .reveal-block.comp{border-left:4px solid var(--acc)}
+
+  .controls{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:.9rem;
+    padding:1rem 1.2rem calc(1rem + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);z-index:15}
+  .controls .btn-reveal{min-width:13rem;font-size:1.05rem;padding:.75rem 1.4rem;border-radius:12px}
+  @media (max-width:560px){.controls .btn-reveal{min-width:0;flex:1}}
+
+  /* start & end */
+  .center{text-align:center;max-width:680px}
+  .big-title{font-size:clamp(2.6rem,8vw,4.2rem);font-weight:900;letter-spacing:-.03em;line-height:.98;margin:.6rem 0 1rem}
+  .big-title .oppure{color:var(--acc)}
+  .center p.lead{color:var(--muted);font-size:1.05rem;text-align:left}
+  .steps{text-align:left;background:var(--surface2);border-radius:14px;padding:1.2rem 1.4rem;margin:1.2rem 0;font-size:1rem}
+  .steps li{margin:.45rem 0}
+  .key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.7rem;margin:1.4rem 0;text-align:left}
+  .key-item{background:var(--surface2);border-radius:12px;padding:.7rem .9rem;display:flex;align-items:center;gap:.7rem}
+  .key-item .kn{font-family:var(--mono);color:var(--faint);font-size:.85rem}
+  .key-item .kv{font-weight:900;font-size:1.05rem}
+  .key-item .kv.ai{color:var(--v-ai)} .key-item .kv.vero{color:var(--v-real)}
+  .rubric{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin:1.2rem 0;text-align:left}
+  .rub{background:var(--surface2);border-radius:12px;padding:.9rem 1rem}
+  .rub .pts{font-family:var(--mono);font-size:.75rem;color:var(--acc-dim);letter-spacing:.12em}
+  .rub .lv{font-weight:900;font-size:1.05rem;margin:.2rem 0}
+  .rub p{margin:0;font-size:.82rem;color:var(--muted)}
+  .golden{border:2px solid var(--acc);border-radius:14px;padding:1.1rem 1.3rem;text-align:left;margin-top:1.2rem}
+  .golden p{margin:.3rem 0}
+</style>
+
+<div id="app"></div>
+
+<script>
+"use strict";
+const Q = [
+ { cat:"FOTO", title:"Katy Perry al Met Gala",
+   desc:"Abito floreale sul red carpet del Met Gala 2024. Persino sua madre ci cascò.",
+   link:"https://www.google.com/search?udm=2&q=katy+perry+met+gala+2024+AI+dress", linkLabel:"Mostra la foto",
+   answer:"AI", why:"Perry quella sera non c'era. La moquette della scalinata è sbagliata e i bordi dell'abito si fondono col fondo.",
+   comp:"Osservare i dettagli: sfondo e bordi tradiscono il falso." },
+ { cat:"FOTO", title:"Deadvlei, Namibia",
+   desc:"Alberi neri morti da 700 anni su argilla bianca, dune rosse, cielo blu: sembra un rendering.",
+   link:"https://www.google.com/search?udm=2&q=Deadvlei+Namibia", linkLabel:"Mostra la foto",
+   answer:"VERO", why:"Esiste davvero: è su Google Maps e in migliaia di foto di viaggiatori, da mille angolazioni diverse.",
+   comp:"Cercare conferme: i luoghi veri hanno mille testimoni, i finti uno solo." },
+ { cat:"TESTO", title:"Poesia brevissima",
+   poem:"M'illumino\nd'immenso.",
+   answer:"VERO", why:"È «Mattina» di Giuseppe Ungaretti, 1917 — scritta in trincea. Molti votano AI: «troppo corta».",
+   comp:"Non fidarsi delle sensazioni: la brevità radicale è una scelta umana." },
+ { cat:"VIDEO", title:"Coniglietti sul trampolino",
+   desc:"Video di videosorveglianza notturna: oltre 230 milioni di visualizzazioni su TikTok.",
+   link:"https://www.tiktok.com/@rachelthecatlovers/video/7531584773500751118", linkLabel:"Guarda il video",
+   answer:"AI", why:"Al secondo 6 un coniglio sparisce; un altro ha per un attimo due teste. Lo stile «telecamera di sicurezza» abbassa le difese.",
+   comp:"Bassa qualità non significa autenticità: è un trucco che aumenta la credibilità." },
+ { cat:"FOTO", title:"Esplosione al Pentagono",
+   desc:"Maggio 2023: la foto rimbalza da account «verificati» e la borsa USA cala per qualche minuto.",
+   link:"https://www.google.com/search?udm=2&q=pentagon+explosion+fake+AI+image", linkLabel:"Mostra la foto",
+   answer:"AI", why:"L'esplosione non è mai avvenuta: la recinzione si fonde con l'edificio e non esiste nessun'altra foto o video dell'evento.",
+   comp:"Un evento vero ha sempre più testimoni: una sola immagine è un allarme rosso." },
+ { cat:"TESTO", title:"Un'altra poesia brevissima",
+   poem:"Tramonto:\nmi spengo\npiano\ncome il giorno.",
+   answer:"AI", why:"Generata da un modello linguistico. Immagine coerente ma prevedibile: «come il giorno» chiude troppo bene.",
+   comp:"L'AI scrive poesie «levigate»; gli umani si prendono rischi." },
+ { cat:"VIDEO", title:"Murmuration di storni su Roma",
+   desc:"Migliaia di uccelli disegnano forme fluide nel cielo: sembra grafica al computer.",
+   link:"https://www.youtube.com/watch?v=jgdbVpHU1-w", linkLabel:"Guarda il video",
+   answer:"VERO", why:"Fenomeno filmato da decenni, da decine di angolazioni. Il Nobel Giorgio Parisi ha scoperto che ogni storno segue 6–7 vicini: ecco il movimento fluido.",
+   comp:"«Sembra finto» non è un criterio: la natura supera l'immaginazione." },
+ { cat:"FOTO", title:"Granchio del cocco",
+   desc:"Artropode terrestre gigante che scala un bidone: sembra il classico contenuto AI da social.",
+   link:"https://www.google.com/search?udm=2&q=coconut+crab+climbing", linkLabel:"Mostra la foto",
+   answer:"VERO", why:"Il Birgus latro esiste: documentato da National Geographic e ricerche zoologiche.",
+   comp:"Verificare la fonte: c'è chi lo studia da decenni." },
+ { cat:"VIDEO", title:"Canguro «di supporto emotivo» in aeroporto",
+   desc:"Un canguro con carta d'imbarco in zampa, mentre una donna discute con la hostess.",
+   link:"https://knowyourmeme.com/memes/emotional-support-kangaroo-rejected-entry-to-plane", linkLabel:"Guarda il video",
+   answer:"AI", why:"Creato da un artista VFX: la «lingua» parlata non esiste e i testi sui cartelli sono illeggibili. Ha ingannato anche utenti esperti.",
+   comp:"Ascoltare e leggere dentro il video: audio e scritte tradiscono il falso." },
+ { cat:"VIDEO", title:"Drone dentro il vulcano",
+   desc:"Islanda 2021: volo radente nella bocca del vulcano in eruzione. Sembra un videogioco.",
+   link:"https://www.youtube.com/watch?v=DQx96G4yHd8", linkLabel:"Guarda il video",
+   answer:"VERO", why:"È un pilota di drone (Björn Steinbekk). Alcuni droni si sono fusi nella lava in diretta: prova fisica.",
+   comp:"Chiusura: il «non può essere vero» non è un criterio. Vince chi verifica." }
+];
+
+let view = { name:"start" };   // start | q | end
+let revealed = {};
+let timerId = null, timerLeft = 0;
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+function startTimer(){
+  stopTimer(); timerLeft = 20; paintTimer();
+  timerId = setInterval(()=>{ timerLeft--; paintTimer(); if(timerLeft<=0) stopTimer(); }, 1000);
+}
+function paintTimer(){
+  const el = document.getElementById("timer"); if(!el) return;
+  el.textContent = timerLeft>0 ? "⏱ "+String(timerLeft).padStart(2,"0")+" s" : "⏱ STOP ✋";
+  el.className = "timer "+(timerLeft>0?"run":"zero");
+}
+
+function render(){
+  stopTimer();
+  if(view.name==="start") renderStart();
+  else if(view.name==="end") renderEnd();
+  else renderQ(view.i);
+  window.scrollTo(0,0);
+}
+
+function renderStart(){
+  app.innerHTML = `
+  <div class="shell"><div class="stage">
+    <div class="card center">
+      <div class="eyebrow">Sfida individuale · 10 contenuti · ~20 minuti</div>
+      <h1 class="big-title">AI <span class="oppure">o</span> NON AI?</h1>
+      <p class="lead">Niente cellulari: serve solo lo schermo del conduttore, un foglietto e una penna a testa.</p>
+      <ol class="steps">
+        <li>Ogni studente scrive sul foglietto i numeri da <b>1 a 10</b>.</li>
+        <li>Per ogni sfida il conduttore mostra il contenuto (foto, video o testo, un clic dal bottone giallo) e avvia il timer di 20 secondi.</li>
+        <li>Ognuno scrive <b>AI</b> oppure <b>VERO</b>. Poi si preme RIVELA e ci si corregge da soli: ✓ o ✗.</li>
+        <li>Alla fine, il punteggio dice il tuo livello di «detective digitale».</li>
+      </ol>
+      <p class="lead">Tasti rapidi: <b>spazio</b> = rivela/avanti · <b>←</b> <b>→</b> = naviga · <b>T</b> = timer.</p>
+    </div>
+  </div>
+  <div class="controls"><button class="btn btn-acc btn-reveal" onclick="go(0)">Inizia la sfida →</button></div>
+  </div>`;
+}
+
+function renderQ(i){
+  const q = Q[i], isRev = !!revealed[i];
+  const vClass = q.answer==="AI" ? "v-ai" : "v-real";
+  app.innerHTML = `
+  <div class="shell">
+    <div class="topbar">
+      <button class="btn" onclick="home()">☰ Inizio</button>
+      <span class="tt">Sfida ${i+1} di ${Q.length}</span>
+      <div class="dots">${Q.map((_,k)=>`<button class="dot${revealed[k]?" done":""}${k===i?" cur":""}" aria-label="Sfida ${k+1}" onclick="go(${k})"></button>`).join("")}</div>
+      <button id="timer" class="timer" onclick="startTimer()">⏱ 20 s</button>
+    </div>
+    <div class="stage"><div class="card">
+      <div class="eyebrow">${q.cat} · scrivi la risposta n. ${i+1} sul foglietto</div>
+      <h2 class="q-title">${q.title}</h2>
+      ${q.desc?`<p class="q-desc">${q.desc}</p>`:""}
+      ${q.poem?`<div class="poem">${esc(q.poem)}</div>`:""}
+      ${q.link?`<a class="show-link" href="${esc(q.link)}" target="_blank" rel="noopener">▶ ${q.linkLabel} <small>(nuova scheda)</small></a>`:""}
+      <div class="vote-strip">
+        <span class="label">Sul foglietto</span>
+        <span class="vote-opt o-ai">AI</span><span class="vote-vs">oppure</span><span class="vote-opt o-real">VERO</span>
+      </div>
+      ${isRev?`
+      <div class="reveal">
+        <span class="stamp ${vClass}">${q.answer}</span>
+        <div class="reveal-block"><span class="label">Perché</span><p>${q.why}</p></div>
+        <div class="reveal-block comp"><span class="label">Cosa allena</span><p>${q.comp}</p></div>
+      </div>`:""}
+    </div></div>
+    <div class="controls">
+      <button class="btn" onclick="prev()">← Indietro</button>
+      ${isRev
+        ? `<button class="btn btn-acc btn-reveal" onclick="next()">${i<Q.length-1?"Prossima sfida →":"Punteggi e livelli →"}</button>`
+        : `<button class="btn btn-acc btn-reveal" onclick="reveal()">👁 RIVELA</button>`}
+    </div>
+  </div>`;
+}
+
+function renderEnd(){
+  app.innerHTML = `
+  <div class="shell"><div class="stage">
+    <div class="card center">
+      <div class="eyebrow">Correzione e livelli</div>
+      <h1 class="big-title">Quante ne hai azzeccate?</h1>
+      <div class="key-grid">
+        ${Q.map((q,k)=>`<div class="key-item"><span class="kn">${k+1}.</span><span class="kv ${q.answer==="AI"?"ai":"vero"}">${q.answer}</span></div>`).join("")}
+      </div>
+      <div class="rubric">
+        <div class="rub"><div class="pts">0–4 PUNTI</div><div class="lv">🐣 Apprendista</div><p>Ti fidi dell'occhio: da oggi, fermati e verifica.</p></div>
+        <div class="rub"><div class="pts">5–7 PUNTI</div><div class="lv">🔍 Osservatore</div><p>Noti gli indizi giusti, ma qualche falso passa ancora.</p></div>
+        <div class="rub"><div class="pts">8–9 PUNTI</div><div class="lv">🕵️ Detective digitale</div><p>Occhio allenato e sano sospetto: quasi imbattibile.</p></div>
+        <div class="rub"><div class="pts">10 PUNTI</div><div class="lv">🏆 Caccia-falsi</div><p>Perfetto! Ora insegna il metodo ai compagni.</p></div>
+      </div>
+      <div class="golden">
+        <p><b>🥇 La regola d'oro:</b> gli indizi visivi (mani, scritte, ombre) sono utili oggi e inutili domani. Il metodo che non scade: <b>fermarsi, cercare la fonte, cercare conferme indipendenti.</b></p>
+        <p><b>Vince chi verifica, non chi ha l'occhio.</b></p>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="go(${Q.length-1})">← Ultima sfida</button>
+    <button class="btn btn-acc btn-reveal" onclick="restart()">↺ Ricomincia</button>
+  </div></div>`;
+}
+
+function home(){ view={name:"start"}; render(); }
+function go(i){ view={name:"q",i}; render(); }
+function reveal(){ if(view.name!=="q") return; revealed[view.i]=true; render(); }
+function next(){ if(view.name!=="q") return; view.i<Q.length-1 ? go(view.i+1) : (view={name:"end"},render()); }
+function prev(){ if(view.name!=="q") return; view.i>0 ? go(view.i-1) : home(); }
+function restart(){ revealed={}; home(); }
+
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){ home(); return; }
+  if(view.name==="start"){ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); go(0);} return; }
+  if(view.name==="end") return;
+  if(e.key==="t"||e.key==="T"){ startTimer(); return; }
+  if(e.key===" "||e.key==="Enter"){ e.preventDefault(); revealed[view.i]?next():reveal(); }
+  else if(e.key==="ArrowRight"){ e.preventDefault(); next(); }
+  else if(e.key==="ArrowLeft"){ e.preventDefault(); prev(); }
+});
+render();
+</script>
