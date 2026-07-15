@@ -1,4 +1,4 @@
-<title>AI o NON AI? — Sfida rapida</title>
+<title>AI o NON AI? — Partita 2</title>
 <style>
   :root{
     --bg:#0f1320; --surface:#181e30; --surface2:#20273f; --line:#2c3450;
@@ -32,6 +32,45 @@
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc-dim);font-weight:600}
   .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
 
+  /* home */
+  .home{max-width:960px;margin:0 auto;padding:3rem 1.5rem 5rem}
+  .hero{text-align:center;margin-bottom:2.6rem}
+  .hero-title{font-size:clamp(2.8rem,8vw,5rem);font-weight:900;letter-spacing:-.035em;line-height:.95;margin:.6rem 0 1rem;text-wrap:balance}
+  .hero-title .oppure{color:var(--acc)}
+  .hero-sub{color:var(--muted);max-width:36rem;margin:0 auto;font-size:1.05rem;text-wrap:balance}
+  .hero-badges{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.3rem}
+  .pill{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;color:var(--muted);background:var(--surface)}
+
+  .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:2rem 0}
+  .cat-tile{position:relative;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:1.2rem 1.2rem 1rem;color:var(--ink);display:flex;flex-direction:column;gap:.5rem;min-height:8.5rem;
+    transition:transform .15s ease,border-color .15s ease;box-shadow:var(--shadow)}
+  .cat-tile:hover{transform:translateY(-3px);border-color:var(--acc)}
+  .cat-tile .ct-num{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;color:var(--acc-dim)}
+  .cat-tile .ct-name{font-size:1.4rem;font-weight:900;letter-spacing:-.02em}
+  .cat-tile .ct-desc{color:var(--muted);font-size:.85rem;flex:1}
+  .cat-tile .ct-count{font-family:var(--mono);font-size:.72rem;color:var(--faint)}
+
+  .home-section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.5rem 1.6rem;margin:1rem 0}
+  .home-section h2{margin:.2rem 0 .8rem;font-size:1.2rem;font-weight:800}
+  .home-section p{margin:.5rem 0;color:var(--muted)}
+  .home-section strong{color:var(--ink)}
+  .steps{color:var(--muted);padding-left:1.2rem;margin:.6rem 0}
+  .steps li{margin:.45rem 0}
+  .steps b{color:var(--ink)}
+  .numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-top:1rem}
+  .num-card{background:var(--surface2);border-radius:12px;padding:1rem 1.1rem}
+  .num-card .big{font-size:1.9rem;font-weight:900;letter-spacing:-.03em;color:var(--acc);font-variant-numeric:tabular-nums}
+  .num-card p{margin:.3rem 0 0;font-size:.84rem;color:var(--muted)}
+  .golden{border:2px solid var(--acc)}
+  .golden p{color:var(--ink)}
+  .sources{columns:2;column-gap:2rem;font-size:.85rem;color:var(--muted);margin:0;padding-left:1.1rem}
+  .sources li{margin-bottom:.45rem;break-inside:avoid}
+  @media (max-width:640px){.sources{columns:1}}
+  .kbd-hint{font-family:var(--mono);font-size:.7rem;color:var(--faint);text-align:center;margin-top:2rem}
+  kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:.05rem .4rem;background:var(--surface)}
+
+  /* game shell */
   .shell{min-height:100vh;display:flex;flex-direction:column}
   .topbar{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:20}
   .topbar .tt{font-weight:800;font-size:.95rem;white-space:nowrap}
@@ -39,7 +78,6 @@
   .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--faint);background:transparent;padding:0}
   .dot.done{background:var(--faint);border-color:var(--faint)}
   .dot.cur{border-color:var(--acc);background:var(--acc)}
-
   .btn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;padding:.5rem .95rem;font-size:.88rem;font-weight:600}
   .btn:hover{border-color:var(--acc)}
   .btn-acc{background:var(--acc);color:var(--acc-ink);border:none;font-weight:800}
@@ -50,9 +88,8 @@
   @media (max-width:640px){.card{padding:1.6rem 1.3rem 2rem}}
   .q-title{font-size:clamp(1.7rem,4.5vw,2.5rem);font-weight:900;letter-spacing:-.025em;line-height:1.08;margin:.5rem 0 .9rem;text-wrap:balance}
   .q-desc{font-size:1.06rem;color:var(--muted);max-width:62ch;margin:0 0 1.1rem}
-
-  .poem{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.5rem,3.6vw,2.1rem);line-height:1.5;background:var(--surface2);border-radius:14px;padding:1.6rem 2rem;margin:0 0 1.2rem;white-space:pre-line;font-style:italic}
-
+  .poem{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.4rem,3.4vw,2rem);line-height:1.5;background:var(--surface2);border-radius:14px;padding:1.6rem 2rem;margin:0 0 1.2rem;white-space:pre-line;font-style:italic}
+  .newsbox{font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.5;background:var(--surface2);border-radius:14px;padding:1.4rem 1.8rem;margin:0 0 1.2rem;font-weight:600}
   .show-link{display:inline-flex;align-items:center;gap:.7rem;background:var(--acc);color:var(--acc-ink);text-decoration:none;
     font-weight:900;font-size:1.15rem;border-radius:14px;padding:1rem 1.6rem;margin:0 0 1.2rem}
   .show-link:hover{filter:brightness(1.06)}
@@ -80,90 +117,163 @@
   .reveal-block .label{display:block;margin-bottom:.3rem}
   .reveal-block p{margin:0;font-size:1rem}
   .reveal-block.comp{border-left:4px solid var(--acc)}
+  .verify{margin-top:.9rem;font-family:var(--mono);font-size:.78rem;color:var(--faint);word-break:break-all}
+  .verify a{color:var(--acc-dim)}
 
   .controls{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:.9rem;
     padding:1rem 1.2rem calc(1rem + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);z-index:15}
   .controls .btn-reveal{min-width:13rem;font-size:1.05rem;padding:.75rem 1.4rem;border-radius:12px}
   @media (max-width:560px){.controls .btn-reveal{min-width:0;flex:1}}
 
-  /* start & end */
+  /* intro & end */
   .center{text-align:center;max-width:680px}
-  .big-title{font-size:clamp(2.6rem,8vw,4.2rem);font-weight:900;letter-spacing:-.03em;line-height:.98;margin:.6rem 0 1rem}
-  .big-title .oppure{color:var(--acc)}
+  .big-title{font-size:clamp(2.4rem,7vw,4rem);font-weight:900;letter-spacing:-.03em;line-height:.98;margin:.6rem 0 1rem}
   .center p.lead{color:var(--muted);font-size:1.05rem;text-align:left}
-  .steps{text-align:left;background:var(--surface2);border-radius:14px;padding:1.2rem 1.4rem;margin:1.2rem 0;font-size:1rem}
-  .steps li{margin:.45rem 0}
-  .key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.7rem;margin:1.4rem 0;text-align:left}
-  .key-item{background:var(--surface2);border-radius:12px;padding:.7rem .9rem;display:flex;align-items:center;gap:.7rem}
-  .key-item .kn{font-family:var(--mono);color:var(--faint);font-size:.85rem}
-  .key-item .kv{font-weight:900;font-size:1.05rem}
+  .key-cat{margin:1.2rem 0 .4rem;text-align:left}
+  .key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:.6rem;margin:.5rem 0 1rem;text-align:left}
+  .key-item{background:var(--surface2);border-radius:12px;padding:.6rem .8rem;display:flex;align-items:center;gap:.6rem}
+  .key-item .kn{font-family:var(--mono);color:var(--faint);font-size:.82rem}
+  .key-item .kv{font-weight:900;font-size:1rem}
   .key-item .kv.ai{color:var(--v-ai)} .key-item .kv.vero{color:var(--v-real)}
   .rubric{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin:1.2rem 0;text-align:left}
   .rub{background:var(--surface2);border-radius:12px;padding:.9rem 1rem}
   .rub .pts{font-family:var(--mono);font-size:.75rem;color:var(--acc-dim);letter-spacing:.12em}
   .rub .lv{font-weight:900;font-size:1.05rem;margin:.2rem 0}
   .rub p{margin:0;font-size:.82rem;color:var(--muted)}
-  .golden{border:2px solid var(--acc);border-radius:14px;padding:1.1rem 1.3rem;text-align:left;margin-top:1.2rem}
-  .golden p{margin:.3rem 0}
+  .golden-box{border:2px solid var(--acc);border-radius:14px;padding:1.1rem 1.3rem;text-align:left;margin-top:1.2rem}
+  .golden-box p{margin:.3rem 0}
 </style>
 
 <div id="app"></div>
 
 <script>
 "use strict";
-const Q = [
- { cat:"FOTO", title:"Katy Perry al Met Gala",
-   desc:"Abito floreale sul red carpet del Met Gala 2024. Persino sua madre ci cascò.",
-   link:"https://www.google.com/search?udm=2&q=katy+perry+met+gala+2024+AI+dress", linkLabel:"Mostra la foto",
-   answer:"AI", why:"Perry quella sera non c'era. La moquette della scalinata è sbagliata e i bordi dell'abito si fondono col fondo.",
-   comp:"Osservare i dettagli: sfondo e bordi tradiscono il falso." },
- { cat:"FOTO", title:"Deadvlei, Namibia",
-   desc:"Alberi neri morti da 700 anni su argilla bianca, dune rosse, cielo blu: sembra un rendering.",
-   link:"https://www.google.com/search?udm=2&q=Deadvlei+Namibia", linkLabel:"Mostra la foto",
-   answer:"VERO", why:"Esiste davvero: è su Google Maps e in migliaia di foto di viaggiatori, da mille angolazioni diverse.",
-   comp:"Cercare conferme: i luoghi veri hanno mille testimoni, i finti uno solo." },
- { cat:"TESTO", title:"Poesia brevissima",
-   poem:"M'illumino\nd'immenso.",
-   answer:"VERO", why:"È «Mattina» di Giuseppe Ungaretti, 1917 — scritta in trincea. Molti votano AI: «troppo corta».",
-   comp:"Non fidarsi delle sensazioni: la brevità radicale è una scelta umana." },
- { cat:"VIDEO", title:"Coniglietti sul trampolino",
-   desc:"Video di videosorveglianza notturna: oltre 230 milioni di visualizzazioni su TikTok.",
-   link:"https://www.tiktok.com/@rachelthecatlovers/video/7531584773500751118", linkLabel:"Guarda il video",
-   answer:"AI", why:"Al secondo 6 un coniglio sparisce; un altro ha per un attimo due teste. Lo stile «telecamera di sicurezza» abbassa le difese.",
-   comp:"Bassa qualità non significa autenticità: è un trucco che aumenta la credibilità." },
- { cat:"FOTO", title:"Esplosione al Pentagono",
-   desc:"Maggio 2023: la foto rimbalza da account «verificati» e la borsa USA cala per qualche minuto.",
-   link:"https://www.google.com/search?udm=2&q=pentagon+explosion+fake+AI+image", linkLabel:"Mostra la foto",
-   answer:"AI", why:"L'esplosione non è mai avvenuta: la recinzione si fonde con l'edificio e non esiste nessun'altra foto o video dell'evento.",
-   comp:"Un evento vero ha sempre più testimoni: una sola immagine è un allarme rosso." },
- { cat:"TESTO", title:"Un'altra poesia brevissima",
-   poem:"Tramonto:\nmi spengo\npiano\ncome il giorno.",
-   answer:"AI", why:"Generata da un modello linguistico. Immagine coerente ma prevedibile: «come il giorno» chiude troppo bene.",
-   comp:"L'AI scrive poesie «levigate»; gli umani si prendono rischi." },
- { cat:"VIDEO", title:"Murmuration di storni su Roma",
-   desc:"Migliaia di uccelli disegnano forme fluide nel cielo: sembra grafica al computer.",
-   link:"https://www.youtube.com/watch?v=jgdbVpHU1-w", linkLabel:"Guarda il video",
-   answer:"VERO", why:"Fenomeno filmato da decenni, da decine di angolazioni. Il Nobel Giorgio Parisi ha scoperto che ogni storno segue 6–7 vicini: ecco il movimento fluido.",
-   comp:"«Sembra finto» non è un criterio: la natura supera l'immaginazione." },
- { cat:"FOTO", title:"Granchio del cocco",
-   desc:"Artropode terrestre gigante che scala un bidone: sembra il classico contenuto AI da social.",
-   link:"https://www.google.com/search?udm=2&q=coconut+crab+climbing", linkLabel:"Mostra la foto",
-   answer:"VERO", why:"Il Birgus latro esiste: documentato da National Geographic e ricerche zoologiche.",
-   comp:"Verificare la fonte: c'è chi lo studia da decenni." },
- { cat:"VIDEO", title:"Canguro «di supporto emotivo» in aeroporto",
-   desc:"Un canguro con carta d'imbarco in zampa, mentre una donna discute con la hostess.",
-   link:"https://knowyourmeme.com/memes/emotional-support-kangaroo-rejected-entry-to-plane", linkLabel:"Guarda il video",
-   answer:"AI", why:"Creato da un artista VFX: la «lingua» parlata non esiste e i testi sui cartelli sono illeggibili. Ha ingannato anche utenti esperti.",
-   comp:"Ascoltare e leggere dentro il video: audio e scritte tradiscono il falso." },
- { cat:"VIDEO", title:"Drone dentro il vulcano",
-   desc:"Islanda 2021: volo radente nella bocca del vulcano in eruzione. Sembra un videogioco.",
-   link:"https://www.youtube.com/watch?v=DQx96G4yHd8", linkLabel:"Guarda il video",
-   answer:"VERO", why:"È un pilota di drone (Björn Steinbekk). Alcuni droni si sono fusi nella lava in diretta: prova fisica.",
-   comp:"Chiusura: il «non può essere vero» non è un criterio. Vince chi verifica." }
-];
+/* Tutti esempi NUOVI, non presenti nella prima partita. Risposte solo AI / VERO. */
+const CATS = [
+{ id:"foto", name:"FOTO", icon:"📷",
+  tile:"Il Papa col piumino, Gesù di gamberetti e animali che sembrano inventati.",
+  intro:"Per ogni sfida: clic sul bottone giallo per mostrare l'immagine, timer di 20 secondi, ognuno scrive AI o VERO sul foglietto accanto al numero indicato.",
+  items:[
+  { title:"Il Papa col piumino bianco",
+    desc:"Marzo 2023: Papa Francesco in un piumino oversize da rapper. È la prima immagine AI creduta vera da milioni di persone.",
+    link:"https://www.google.com/search?udm=2&q=pope+francis+white+puffer+jacket+AI", linkLabel:"Mostra la foto",
+    answer:"AI", why:"Generata con Midjourney da un utente di Chicago «per ridere». Occhiali fusi con l'ombra, mano che impugna male la borraccia, crocifisso appeso storto.",
+    comp:"Il contesto conta: una persona famosissima in una situazione «strana» merita sempre una verifica." },
+  { title:"Lo specchio del cielo — Salar de Uyuni",
+    desc:"Una distesa dove il cielo si riflette perfettamente sotto i piedi: le persone sembrano camminare sulle nuvole.",
+    link:"https://www.google.com/search?udm=2&q=salar+de+uyuni+mirror+reflection", linkLabel:"Mostra la foto",
+    answer:"VERO", why:"È la più grande distesa di sale del mondo, in Bolivia: nella stagione delle piogge un velo d'acqua la trasforma in uno specchio. Su Google Maps e in migliaia di foto di viaggiatori.",
+    comp:"I luoghi veri hanno mille testimoni da mille angolazioni; i finti ne hanno uno solo." },
+  { title:"Gesù di gamberetti",
+    desc:"Su Facebook girano immagini di Gesù fatto di gamberetti, granchi e crostacei, con migliaia di «Amen» nei commenti.",
+    link:"https://www.google.com/search?udm=2&q=shrimp+jesus+AI+facebook", linkLabel:"Mostra la foto",
+    answer:"AI", why:"È il simbolo dello «AI slop»: contenuti generati in serie per raccogliere like e monetizzare. Nessuna fonte, nessun autore, solo engagement.",
+    comp:"Chiedersi sempre: chi l'ha pubblicato, e perché? Like e condivisioni valgono soldi." },
+  { title:"L'antilope saiga",
+    desc:"Un'antilope con una proboscide gonfiabile che sembra uscita da Star Wars.",
+    link:"https://www.google.com/search?udm=2&q=saiga+antelope", linkLabel:"Mostra la foto",
+    answer:"VERO", why:"Vive nelle steppe del Kazakistan; il naso filtra la polvere d'estate e riscalda l'aria d'inverno. Documentata da zoologi e dal WWF.",
+    comp:"«Sembra finto» non è un criterio: la natura supera l'immaginazione dei modelli." },
+  { title:"La bambina col cucciolo nell'alluvione",
+    desc:"Ottobre 2024, uragano Helene negli USA: una bambina in lacrime stringe un cucciolo su una barca. Condivisa anche da politici.",
+    link:"https://www.google.com/search?udm=2&q=hurricane+helene+girl+puppy+boat+AI", linkLabel:"Mostra la foto",
+    answer:"AI", why:"Le dita sono sbagliate e ne esistono più versioni leggermente diverse — prova della generazione. Chi la condivise disse: «non importa se è vera, rende l'idea». Importa.",
+    comp:"Le emozioni forti spengono lo spirito critico: è proprio lì che i falsi colpiscono." },
+  { title:"Il drago blu",
+    desc:"Una creatura blu elettrico con le ali, lunga pochi centimetri, spiaggiata sulla sabbia.",
+    link:"https://www.google.com/search?udm=2&q=glaucus+atlanticus+blue+dragon", linkLabel:"Mostra la foto",
+    answer:"VERO", why:"È il Glaucus atlanticus, un mollusco marino che galleggia a pancia in su e mangia le velelle urticanti. Fotografato da biologi marini in tutto il mondo.",
+    comp:"Verificare la fonte: se lo studiano le università, esiste." }
+]},
+{ id:"video", name:"VIDEO", icon:"🎬",
+  tile:"Sora, deepfake, ASMR di vetro — e imprese vere che sembrano impossibili.",
+  intro:"Clic sul bottone giallo: il video si apre in una nuova scheda sul tuo schermo. Bastano 20–30 secondi di visione, poi timer e voto sul foglietto.",
+  items:[
+  { title:"La donna che cammina per Tokyo",
+    desc:"Una donna elegante cammina in una strada di Tokyo bagnata di neon. Video che ha fatto il giro del mondo a febbraio 2024.",
+    link:"https://www.youtube.com/results?search_query=sora+openai+tokyo+woman+walking", linkLabel:"Guarda il video",
+    answer:"AI", why:"È il video-demo di Sora (OpenAI). A guardare bene: le gambe a un certo punto si «scambiano», i passanti si dissolvono, le scritte sono senza senso.",
+    comp:"Guardare due volte: la prima si guarda la protagonista, la seconda lo sfondo. I falsi si tradiscono ai margini." },
+  { title:"ASMR: tagliare la frutta di vetro",
+    desc:"Un coltello affetta una mela di vetro con un suono cristallino perfetto. Milioni di visualizzazioni su TikTok nel 2025.",
+    link:"https://www.youtube.com/results?search_query=glass+fruit+cutting+asmr+ai", linkLabel:"Guarda il video",
+    answer:"AI", why:"Generato con Veo 3: video e suono creati insieme dall'AI. La frutta di vetro non esiste, ma il cervello «sente» che il suono è giusto e si fida.",
+    comp:"Anche l'audio ora si genera: l'orecchio non è più una prova." },
+  { title:"Il salto dallo spazio",
+    desc:"Un uomo si lancia da una capsula a 39.000 metri di altezza e supera il muro del suono in caduta libera.",
+    link:"https://www.youtube.com/results?search_query=felix+baumgartner+space+jump+red+bull+stratos", linkLabel:"Guarda il video",
+    answer:"VERO", why:"Felix Baumgartner, 14 ottobre 2012: 8 milioni di persone lo guardarono in diretta streaming. Telemetria, testimoni, record certificati.",
+    comp:"Gli eventi veri lasciano tracce enormi: dirette, dati, articoli dello stesso giorno." },
+  { title:"«Io non sono Morgan Freeman»",
+    desc:"Morgan Freeman guarda in camera e dice: «Io non sono Morgan Freeman. Quello che vedete non è reale».",
+    link:"https://www.youtube.com/results?search_query=deepfake+morgan+freeman+this+is+not+morgan+freeman", linkLabel:"Guarda il video",
+    answer:"AI", why:"Deepfake dichiarato del collettivo olandese Diep Nep (2021), con un imitatore per la voce. Creato apposta per mostrare quanto è facile.",
+    comp:"Se un volto famoso dice qualcosa di strano, cercare la fonte originale prima di crederci." },
+  { title:"Fulmini dentro il vulcano",
+    desc:"Un'eruzione notturna con fulmini che nascono dentro la colonna di cenere. Sembra un poster di un film fantasy.",
+    link:"https://www.youtube.com/results?search_query=volcanic+lightning+eruption", linkLabel:"Guarda il video",
+    answer:"VERO", why:"Si chiama «temporale sporco»: le particelle di cenere si caricano elettricamente sfregando tra loro. Filmato su decine di vulcani da fotografi e vulcanologi.",
+    comp:"Cercare conferme indipendenti: lo stesso fenomeno, filmato da persone diverse in luoghi diversi." },
+  { title:"Il treno di luci nel cielo",
+    desc:"Una fila perfetta di luci bianche attraversa il cielo notturno in silenzio. Migliaia di segnalazioni di «UFO».",
+    link:"https://www.youtube.com/results?search_query=starlink+train+night+sky", linkLabel:"Guarda il video",
+    answer:"VERO", why:"Sono i satelliti Starlink appena lanciati, ancora in fila prima di distribuirsi. Ogni «avvistamento» coincide con un lancio documentato.",
+    comp:"Prima di gridare al mistero, cercare la spiegazione: le date dei lanci sono pubbliche." },
+  { title:"Il podcast dei neonati",
+    desc:"Due bebè con le cuffie conducono un podcast e parlano da adulti. Trend enorme del 2025.",
+    link:"https://www.youtube.com/results?search_query=ai+baby+podcast", linkLabel:"Guarda il video",
+    answer:"AI", why:"Volti generati o animati con AI a partire da foto, voci sintetiche. Contenuto dichiaratamente assurdo, ma i canali guadagnano su ogni visualizzazione.",
+    comp:"Chiedersi il perché: dietro i contenuti «senza senso» c'è quasi sempre un modello di guadagno." },
+  { title:"900 metri di parete, senza corda",
+    desc:"Un uomo scala El Capitan, una parete verticale di 900 metri, senza corde né protezioni.",
+    link:"https://www.youtube.com/results?search_query=alex+honnold+free+solo+el+capitan", linkLabel:"Guarda il video",
+    answer:"VERO", why:"Alex Honnold, 3 giugno 2017: l'impresa del film premio Oscar «Free Solo», con troupe, testimoni e documentazione completa.",
+    comp:"Chiusura del round: il «non può essere vero» non è un criterio. Vince chi verifica." }
+]},
+{ id:"testi", name:"TESTI", icon:"✍️",
+  tile:"Poesie, notizie assurde ma vere e notizie plausibili ma inventate.",
+  intro:"Il testo appare nudo sullo schermo, senza autore né contesto. Leggilo ad alta voce una volta, poi timer e voto. (Ricorda lo studio del 2024: i lettori riconoscono le poesie AI meno del caso, 46,6%.)",
+  items:[
+  { title:"Tre versi",
+    poem:"Ognuno sta solo sul cuor della terra\ntrafitto da un raggio di sole:\ned è subito sera.",
+    answer:"VERO", why:"È Salvatore Quasimodo, «Ed è subito sera» (1930), premio Nobel 1959. Molti votano AI: «troppo semplice». Tre versi che contengono una vita intera.",
+    comp:"La semplicità estrema è un rischio che l'AI non corre: leviga, non taglia." },
+  { title:"Altri quattro versi",
+    poem:"La sera scende\ncome una mano\nche chiude gli occhi\nal mondo stanco.",
+    answer:"AI", why:"Generata da un modello linguistico per questa partita. Suona bene ma non rischia nulla: immagine prevedibile, chiusura troppo rotonda, nessuno spigolo.",
+    comp:"Profondità simulata: tante immagini «poetiche» accumulate non fanno una poesia." },
+  { title:"Notizia assurda",
+    news:"«Nel 1919 a Boston un serbatoio cedette e un'ondata di melassa alta 8 metri travolse le strade a 56 km/h, uccidendo 21 persone.»",
+    answer:"VERO", why:"La Grande inondazione di melassa di Boston è documentata da giornali dell'epoca, processi e libri di storia. Per decenni, nei giorni caldi, il quartiere profumava di caramello.",
+    verify:"https://en.wikipedia.org/wiki/Great_Molasses_Flood",
+    comp:"La realtà è spesso meno plausibile della finzione: assurdo non significa falso." },
+  { title:"Notizia plausibile",
+    news:"«Il Ministero dell'Istruzione sperimenta in 50 scuole un registro elettronico che rileva gli sbadigli con la webcam per misurare il livello di attenzione in classe.»",
+    answer:"AI", why:"Inventata per questa partita. Suona vera perché è costruita con pezzi veri (registro elettronico, webcam, scuole pilota). Ma se la cerchi, nessuna testata la riporta.",
+    comp:"Il metodo che non scade: cercare la notizia. Se nessuna fonte affidabile la riporta, allarme rosso." }
+]},
+{ id:"musica", name:"MUSICA", icon:"🎧",
+  tile:"La canzone dei Nirvana mai scritta e la popstar che non esiste (ma non è AI).",
+  intro:"Ascolto di 30–60 secondi a occhi chiusi, poi timer e voto. I brani si aprono dal bottone giallo.",
+  items:[
+  { title:"La canzone «dei Nirvana»",
+    desc:"«Drowned in the Sun»: voce, chitarre e stile di Kurt Cobain, morto nel 1994. Pubblicata nel 2021.",
+    link:"https://www.youtube.com/results?search_query=drowned+in+the+sun+nirvana+ai", linkLabel:"Ascolta il brano",
+    answer:"AI", why:"Progetto «Lost Tapes of the 27 Club»: musica generata da un'AI addestrata sui Nirvana, cantata da un interprete, per parlare di salute mentale nei musicisti.",
+    comp:"Le voci e gli stili si clonano: conta chi lo dichiara e perché lo fa." },
+  { title:"La popstar che riempie gli stadi",
+    desc:"Una cantante con i capelli turchesi fa concerti sold-out da anni: sul palco c'è solo un ologramma, la voce è interamente sintetica.",
+    link:"https://www.youtube.com/results?search_query=hatsune+miku+live+concert", linkLabel:"Guarda un concerto",
+    answer:"VERO", why:"Hatsune Miku esiste dal 2007: è un software (Vocaloid) con la voce campionata da un'attrice. Niente AI generativa: ogni canzone è scritta nota per nota da autori umani.",
+    comp:"Sintetico non significa AI: anche qui, «suona finto» non dice chi l'ha creato." }
+]}];
 
-let view = { name:"start" };   // start | q | end
-let revealed = {};
+/* numerazione globale 1..N per il foglietto */
+let n = 0; CATS.forEach(c => c.items.forEach(it => { it.num = ++n; }));
+const TOTAL = n;
+
+let view = { name:"home" };   // home | intro | q | end
+let revealed = {};            // "c-i" -> true
 let timerId = null, timerLeft = 0;
 const app = document.getElementById("app");
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
@@ -181,48 +291,123 @@ function paintTimer(){
 
 function render(){
   stopTimer();
-  if(view.name==="start") renderStart();
+  if(view.name==="home") renderHome();
+  else if(view.name==="intro") renderIntro(view.c);
   else if(view.name==="end") renderEnd();
-  else renderQ(view.i);
+  else renderQ(view.c, view.i);
   window.scrollTo(0,0);
 }
 
-function renderStart(){
+function countDone(c){ return CATS[c].items.reduce((a,_,k)=>a+(revealed[c+"-"+k]?1:0),0); }
+
+function renderHome(){
   app.innerHTML = `
-  <div class="shell"><div class="stage">
-    <div class="card center">
-      <div class="eyebrow">Sfida individuale · 10 contenuti · ~20 minuti</div>
-      <h1 class="big-title">AI <span class="oppure">o</span> NON AI?</h1>
-      <p class="lead">Niente cellulari: serve solo lo schermo del conduttore, un foglietto e una penna a testa.</p>
-      <ol class="steps">
-        <li>Ogni studente scrive sul foglietto i numeri da <b>1 a 10</b>.</li>
-        <li>Per ogni sfida il conduttore mostra il contenuto (foto, video o testo, un clic dal bottone giallo) e avvia il timer di 20 secondi.</li>
-        <li>Ognuno scrive <b>AI</b> oppure <b>VERO</b>. Poi si preme RIVELA e ci si corregge da soli: ✓ o ✗.</li>
-        <li>Alla fine, il punteggio dice il tuo livello di «detective digitale».</li>
-      </ol>
-      <p class="lead">Tasti rapidi: <b>spazio</b> = rivela/avanti · <b>←</b> <b>→</b> = naviga · <b>T</b> = timer.</p>
+  <div class="home">
+    <div class="hero">
+      <div class="eyebrow">Partita 2 · sfida individuale · tutti esempi nuovi</div>
+      <h1 class="hero-title">AI <span class="oppure">o</span> NON AI?</h1>
+      <p class="hero-sub">${TOTAL} contenuti mai visti nella prima partita. Niente cellulari: servono solo lo schermo,
+      un foglietto e una penna a testa.</p>
+      <div class="hero-badges">
+        <span class="pill">4 categorie</span><span class="pill">${TOTAL} sfide</span>
+        <span class="pill">Punteggio individuale</span><span class="pill">~40 minuti</span>
+      </div>
     </div>
-  </div>
-  <div class="controls"><button class="btn btn-acc btn-reveal" onclick="go(0)">Inizia la sfida →</button></div>
+
+    <div class="cat-grid">
+      ${CATS.map((c,idx)=>`
+        <button class="cat-tile" onclick="goIntro(${idx})">
+          <span class="ct-num">${c.icon} CATEGORIA ${idx+1}</span>
+          <span class="ct-name">${c.name}</span>
+          <span class="ct-desc">${c.tile}</span>
+          <span class="ct-count">sfide ${c.items[0].num}–${c.items[c.items.length-1].num} · ${countDone(idx)}/${c.items.length} rivelate</span>
+        </button>`).join("")}
+    </div>
+
+    <section class="home-section">
+      <h2>Come si gioca</h2>
+      <ol class="steps">
+        <li>Ogni studente scrive sul foglietto i numeri da <b>1 a ${TOTAL}</b> (la numerazione continua tra le categorie).</li>
+        <li>Il conduttore mostra il contenuto — foto, video, testo o brano — con un clic sul <b>bottone giallo</b>, e avvia il <b>timer di 20 secondi</b>.</li>
+        <li>Ognuno scrive <b>AI</b> oppure <b>VERO</b>. Poi si preme <b>RIVELA</b>: risposta, spiegazione e la competenza che quella sfida allena.</li>
+        <li>Ci si corregge da soli (✓/✗). Alla fine, la schermata <b>Correzione</b> riepiloga tutte le risposte e assegna i livelli.</li>
+      </ol>
+      <p><strong>Variante veloce (20 min):</strong> gioca solo FOTO + VIDEO, oppure una categoria a scelta della classe.</p>
+    </section>
+
+    <section class="home-section">
+      <h2>Numeri che colpiscono <span class="label">— da citare durante la partita</span></h2>
+      <div class="numbers">
+        <div class="num-card"><div class="big">46,6%</div><p>accuratezza media nel riconoscere poesie AI — peggio del lancio di una moneta (studio su 1.634 persone, 2024)</p></div>
+        <div class="num-card"><div class="big">Milioni</div><p>di persone credettero vera la foto del Papa col piumino: il primo grande inganno AI di massa (2023)</p></div>
+        <div class="num-card"><div class="big">8 mln</div><p>di spettatori in diretta per il salto dallo spazio di Baumgartner: gli eventi veri lasciano tracce enormi (2012)</p></div>
+        <div class="num-card"><div class="big">2 sec</div><p>il tempo che serve per generare oggi un'immagine falsa: verificarla richiede di più — per questo vince chi verifica</p></div>
+      </div>
+    </section>
+
+    <section class="home-section golden">
+      <h2>🥇 La regola d'oro da lasciare alla classe</h2>
+      <p>Gli indizi visivi (mani, scritte, ombre) sono utili oggi e inutili domani. Il metodo che non scade:
+      <strong>fermarsi, cercare la fonte, cercare conferme indipendenti.</strong> Chi l'ha pubblicato per primo?
+      Lo riporta una testata affidabile? La ricerca inversa dell'immagine (Google Lens) cosa mostra?</p>
+      <p><strong>Vince chi verifica, non chi ha l'occhio.</strong></p>
+    </section>
+
+    <section class="home-section">
+      <h2>Fonti per il conduttore</h2>
+      <ul class="sources">
+        <li>The Guardian / BBC — «Balenciaga Pope», l'immagine Midjourney del Papa (2023)</li>
+        <li>404 Media / Stanford — «Shrimp Jesus» e l'AI slop su Facebook (2024)</li>
+        <li>AP / fact-checker — la bambina col cucciolo dell'uragano Helene è AI (2024)</li>
+        <li>OpenAI — video dimostrativi di Sora, «Tokyo walk» (2024)</li>
+        <li>Diep Nep — deepfake dichiarato «This is not Morgan Freeman» (2021)</li>
+        <li>Red Bull Stratos — telemetria e diretta del salto di Baumgartner (2012)</li>
+        <li>National Geographic — «Free Solo», El Capitan senza corda (2017)</li>
+        <li>Rolling Stone — «Drowned in the Sun», il progetto Lost Tapes of the 27 Club (2021)</li>
+        <li>Crypton Future Media — Hatsune Miku e la tecnologia Vocaloid</li>
+        <li>Wikipedia — Great Molasses Flood, Boston 1919</li>
+        <li>Porter &amp; Machery — studio sulle poesie AI, Scientific Reports (2024)</li>
+      </ul>
+    </section>
+
+    <p class="kbd-hint"><kbd>←</kbd> <kbd>→</kbd> naviga · <kbd>spazio</kbd> rivela/avanti · <kbd>T</kbd> timer · <kbd>Esc</kbd> menu</p>
   </div>`;
 }
 
-function renderQ(i){
-  const q = Q[i], isRev = !!revealed[i];
+function renderIntro(c){
+  const C = CATS[c];
+  app.innerHTML = `
+  <div class="shell">
+    ${topbar(c,null)}
+    <div class="stage"><div class="card center">
+      <div class="eyebrow">${C.icon} Categoria ${c+1} · sfide ${C.items[0].num}–${C.items[C.items.length-1].num}</div>
+      <h1 class="big-title">${C.name}</h1>
+      <p class="lead">${C.intro}</p>
+      <div class="vote-strip" style="justify-content:center">
+        <span class="label">Sul foglietto</span>
+        <span class="vote-opt o-ai">AI</span><span class="vote-vs">oppure</span><span class="vote-opt o-real">VERO</span>
+      </div>
+    </div></div>
+    <div class="controls">
+      <button class="btn" onclick="goHome()">← Menu</button>
+      <button class="btn btn-acc btn-reveal" onclick="goQ(${c},0)">Inizia →</button>
+    </div>
+  </div>`;
+}
+
+function renderQ(c,i){
+  const C = CATS[c], q = C.items[i];
+  const key = c+"-"+i, isRev = !!revealed[key];
   const vClass = q.answer==="AI" ? "v-ai" : "v-real";
   app.innerHTML = `
   <div class="shell">
-    <div class="topbar">
-      <button class="btn" onclick="home()">☰ Inizio</button>
-      <span class="tt">Sfida ${i+1} di ${Q.length}</span>
-      <div class="dots">${Q.map((_,k)=>`<button class="dot${revealed[k]?" done":""}${k===i?" cur":""}" aria-label="Sfida ${k+1}" onclick="go(${k})"></button>`).join("")}</div>
-      <button id="timer" class="timer" onclick="startTimer()">⏱ 20 s</button>
-    </div>
+    ${topbar(c,i)}
     <div class="stage"><div class="card">
-      <div class="eyebrow">${q.cat} · scrivi la risposta n. ${i+1} sul foglietto</div>
+      <div class="eyebrow">${C.icon} ${C.name} · scrivi la risposta n. ${q.num} sul foglietto</div>
       <h2 class="q-title">${q.title}</h2>
       ${q.desc?`<p class="q-desc">${q.desc}</p>`:""}
       ${q.poem?`<div class="poem">${esc(q.poem)}</div>`:""}
+      ${q.news?`<div class="newsbox">${q.news}</div>`:""}
       ${q.link?`<a class="show-link" href="${esc(q.link)}" target="_blank" rel="noopener">▶ ${q.linkLabel} <small>(nuova scheda)</small></a>`:""}
       <div class="vote-strip">
         <span class="label">Sul foglietto</span>
@@ -233,14 +418,35 @@ function renderQ(i){
         <span class="stamp ${vClass}">${q.answer}</span>
         <div class="reveal-block"><span class="label">Perché</span><p>${q.why}</p></div>
         <div class="reveal-block comp"><span class="label">Cosa allena</span><p>${q.comp}</p></div>
+        ${q.verify?`<p class="verify">Verifica: <a href="${esc(q.verify)}" target="_blank" rel="noopener">${esc(q.verify)}</a></p>`:""}
       </div>`:""}
     </div></div>
     <div class="controls">
       <button class="btn" onclick="prev()">← Indietro</button>
       ${isRev
-        ? `<button class="btn btn-acc btn-reveal" onclick="next()">${i<Q.length-1?"Prossima sfida →":"Punteggi e livelli →"}</button>`
+        ? `<button class="btn btn-acc btn-reveal" onclick="next()">${nextLabel(c,i)}</button>`
         : `<button class="btn btn-acc btn-reveal" onclick="reveal()">👁 RIVELA</button>`}
     </div>
+  </div>`;
+}
+
+function nextLabel(c,i){
+  if(i < CATS[c].items.length-1) return "Prossima sfida →";
+  if(c < CATS.length-1) return "Categoria "+CATS[c+1].name+" →";
+  return "Correzione e livelli →";
+}
+
+function topbar(c,i){
+  const C = CATS[c];
+  return `
+  <div class="topbar">
+    <button class="btn" onclick="goHome()">☰ Menu</button>
+    <span class="tt">${C.icon} ${C.name}</span>
+    <div class="dots">${C.items.map((_,k)=>{
+      const cls="dot"+(revealed[c+"-"+k]?" done":"")+(i===k?" cur":"");
+      return `<button class="${cls}" aria-label="Sfida ${CATS[c].items[k].num}" onclick="goQ(${c},${k})"></button>`;
+    }).join("")}</div>
+    <button id="timer" class="timer" onclick="startTimer()">⏱ 20 s</button>
   </div>`;
 }
 
@@ -248,42 +454,61 @@ function renderEnd(){
   app.innerHTML = `
   <div class="shell"><div class="stage">
     <div class="card center">
-      <div class="eyebrow">Correzione e livelli</div>
+      <div class="eyebrow">Correzione finale</div>
       <h1 class="big-title">Quante ne hai azzeccate?</h1>
-      <div class="key-grid">
-        ${Q.map((q,k)=>`<div class="key-item"><span class="kn">${k+1}.</span><span class="kv ${q.answer==="AI"?"ai":"vero"}">${q.answer}</span></div>`).join("")}
-      </div>
+      ${CATS.map(c=>`
+        <div class="key-cat"><span class="label">${c.icon} ${c.name}</span></div>
+        <div class="key-grid">
+          ${c.items.map(q=>`<div class="key-item"><span class="kn">${q.num}.</span><span class="kv ${q.answer==="AI"?"ai":"vero"}">${q.answer}</span></div>`).join("")}
+        </div>`).join("")}
       <div class="rubric">
-        <div class="rub"><div class="pts">0–4 PUNTI</div><div class="lv">🐣 Apprendista</div><p>Ti fidi dell'occhio: da oggi, fermati e verifica.</p></div>
-        <div class="rub"><div class="pts">5–7 PUNTI</div><div class="lv">🔍 Osservatore</div><p>Noti gli indizi giusti, ma qualche falso passa ancora.</p></div>
-        <div class="rub"><div class="pts">8–9 PUNTI</div><div class="lv">🕵️ Detective digitale</div><p>Occhio allenato e sano sospetto: quasi imbattibile.</p></div>
-        <div class="rub"><div class="pts">10 PUNTI</div><div class="lv">🏆 Caccia-falsi</div><p>Perfetto! Ora insegna il metodo ai compagni.</p></div>
+        <div class="rub"><div class="pts">0–8 PUNTI</div><div class="lv">🐣 Apprendista</div><p>Ti fidi dell'occhio: da oggi, fermati e verifica.</p></div>
+        <div class="rub"><div class="pts">9–13 PUNTI</div><div class="lv">🔍 Osservatore</div><p>Noti gli indizi giusti, ma qualche falso passa ancora.</p></div>
+        <div class="rub"><div class="pts">14–17 PUNTI</div><div class="lv">🕵️ Detective digitale</div><p>Occhio allenato e sano sospetto: quasi imbattibile.</p></div>
+        <div class="rub"><div class="pts">18–20 PUNTI</div><div class="lv">🏆 Caccia-falsi</div><p>Livello massimo: ora insegna il metodo ai compagni.</p></div>
       </div>
-      <div class="golden">
-        <p><b>🥇 La regola d'oro:</b> gli indizi visivi (mani, scritte, ombre) sono utili oggi e inutili domani. Il metodo che non scade: <b>fermarsi, cercare la fonte, cercare conferme indipendenti.</b></p>
+      <div class="golden-box">
+        <p><b>🥇 La regola d'oro:</b> gli indizi visivi sono utili oggi e inutili domani. Il metodo che non scade:
+        <b>fermarsi, cercare la fonte, cercare conferme indipendenti.</b></p>
         <p><b>Vince chi verifica, non chi ha l'occhio.</b></p>
       </div>
     </div>
   </div>
   <div class="controls">
-    <button class="btn" onclick="go(${Q.length-1})">← Ultima sfida</button>
-    <button class="btn btn-acc btn-reveal" onclick="restart()">↺ Ricomincia</button>
+    <button class="btn" onclick="goHome()">☰ Menu</button>
+    <button class="btn btn-acc btn-reveal" onclick="restart()">↺ Nuova partita</button>
   </div></div>`;
 }
 
-function home(){ view={name:"start"}; render(); }
-function go(i){ view={name:"q",i}; render(); }
-function reveal(){ if(view.name!=="q") return; revealed[view.i]=true; render(); }
-function next(){ if(view.name!=="q") return; view.i<Q.length-1 ? go(view.i+1) : (view={name:"end"},render()); }
-function prev(){ if(view.name!=="q") return; view.i>0 ? go(view.i-1) : home(); }
-function restart(){ revealed={}; home(); }
+function goHome(){ view={name:"home"}; render(); }
+function goIntro(c){ view={name:"intro",c}; render(); }
+function goQ(c,i){ view={name:"q",c,i}; render(); }
+function goEnd(){ view={name:"end"}; render(); }
+function reveal(){ if(view.name!=="q") return; revealed[view.c+"-"+view.i]=true; render(); }
+function next(){
+  if(view.name==="intro"){ goQ(view.c,0); return; }
+  if(view.name!=="q") return;
+  const C = CATS[view.c];
+  if(view.i < C.items.length-1) goQ(view.c, view.i+1);
+  else if(view.c < CATS.length-1) goIntro(view.c+1);
+  else goEnd();
+}
+function prev(){
+  if(view.name!=="q") return;
+  if(view.i>0) goQ(view.c, view.i-1); else goIntro(view.c);
+}
+function restart(){ revealed={}; goHome(); }
 
 document.addEventListener("keydown", e=>{
-  if(e.key==="Escape"){ home(); return; }
-  if(view.name==="start"){ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); go(0);} return; }
-  if(view.name==="end") return;
+  if(e.key==="Escape"){ goHome(); return; }
+  if(view.name==="home"||view.name==="end") return;
   if(e.key==="t"||e.key==="T"){ startTimer(); return; }
-  if(e.key===" "||e.key==="Enter"){ e.preventDefault(); revealed[view.i]?next():reveal(); }
+  if(e.key===" "||e.key==="Enter"){
+    e.preventDefault();
+    if(view.name==="intro") goQ(view.c,0);
+    else if(!revealed[view.c+"-"+view.i]) reveal();
+    else next();
+  }
   else if(e.key==="ArrowRight"){ e.preventDefault(); next(); }
   else if(e.key==="ArrowLeft"){ e.preventDefault(); prev(); }
 });
