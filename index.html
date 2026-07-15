@@ -1,0 +1,691 @@
+<title>AI o NON AI?</title>
+<style>
+  :root{
+    --bg:#0f1320; --surface:#181e30; --surface2:#20273f; --line:#2c3450;
+    --ink:#eef1fa; --muted:#9aa2bc; --faint:#6b7391;
+    --acc:#ffc933; --acc-ink:#1a1405; --acc-dim:#b78d1a;
+    --v-ai:#c18cff; --v-ai-bg:rgba(193,140,255,.13);
+    --v-real:#3ddc97; --v-real-bg:rgba(61,220,151,.12);
+    --v-misto:#ffb25c; --v-misto-bg:rgba(255,178,92,.12);
+    --v-falso:#ff7a7a; --v-falso-bg:rgba(255,122,122,.12);
+    --shadow:0 18px 50px rgba(4,6,14,.55);
+    --mono:ui-monospace,'SF Mono','Cascadia Mono','Segoe UI Mono',Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f2f4fa; --surface:#ffffff; --surface2:#eaedf6; --line:#d7dcec;
+      --ink:#161b2c; --muted:#5b6380; --faint:#8b92ad;
+      --acc:#ffc933; --acc-ink:#1a1405; --acc-dim:#8a6a00;
+      --v-ai:#7a3ff2; --v-ai-bg:rgba(122,63,242,.09);
+      --v-real:#0c9e63; --v-real-bg:rgba(12,158,99,.09);
+      --v-misto:#c26a00; --v-misto-bg:rgba(194,106,0,.09);
+      --v-falso:#d43d3d; --v-falso-bg:rgba(212,61,61,.09);
+      --shadow:0 14px 40px rgba(22,27,44,.14);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f1320; --surface:#181e30; --surface2:#20273f; --line:#2c3450;
+    --ink:#eef1fa; --muted:#9aa2bc; --faint:#6b7391;
+    --acc:#ffc933; --acc-ink:#1a1405; --acc-dim:#b78d1a;
+    --v-ai:#c18cff; --v-ai-bg:rgba(193,140,255,.13);
+    --v-real:#3ddc97; --v-real-bg:rgba(61,220,151,.12);
+    --v-misto:#ffb25c; --v-misto-bg:rgba(255,178,92,.12);
+    --v-falso:#ff7a7a; --v-falso-bg:rgba(255,122,122,.12);
+    --shadow:0 18px 50px rgba(4,6,14,.55);
+  }
+  :root[data-theme="light"]{
+    --bg:#f2f4fa; --surface:#ffffff; --surface2:#eaedf6; --line:#d7dcec;
+    --ink:#161b2c; --muted:#5b6380; --faint:#8b92ad;
+    --acc:#ffc933; --acc-ink:#1a1405; --acc-dim:#8a6a00;
+    --v-ai:#7a3ff2; --v-ai-bg:rgba(122,63,242,.09);
+    --v-real:#0c9e63; --v-real-bg:rgba(12,158,99,.09);
+    --v-misto:#c26a00; --v-misto-bg:rgba(194,106,0,.09);
+    --v-falso:#d43d3d; --v-falso-bg:rgba(212,61,61,.09);
+    --shadow:0 14px 40px rgba(22,27,44,.14);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+    -webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  button{font-family:inherit;cursor:pointer}
+  button:focus-visible,[contenteditable]:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc-dim);font-weight:600}
+  .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
+
+  /* ---------- HOME ---------- */
+  .home{max-width:960px;margin:0 auto;padding:3.5rem 1.5rem 5rem}
+  .hero{text-align:center;margin-bottom:3rem}
+  .hero-title{font-size:clamp(3rem,9vw,5.6rem);font-weight:900;letter-spacing:-.035em;line-height:.95;margin:.6rem 0 1rem;text-wrap:balance}
+  .hero-title .oppure{color:var(--acc)}
+  .hero-sub{color:var(--muted);max-width:34rem;margin:0 auto;font-size:1.06rem;text-wrap:balance}
+  .hero-badges{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:1.4rem}
+  .pill{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;
+    border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;color:var(--muted);background:var(--surface)}
+
+  .round-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin:2.2rem 0}
+  .round-tile{position:relative;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:1.3rem 1.2rem 1.1rem;color:var(--ink);display:flex;flex-direction:column;gap:.55rem;min-height:9.5rem;
+    transition:transform .15s ease,border-color .15s ease;box-shadow:var(--shadow)}
+  .round-tile:hover{transform:translateY(-3px);border-color:var(--acc)}
+  .round-tile .rt-num{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;color:var(--acc-dim)}
+  .round-tile .rt-name{font-size:1.5rem;font-weight:900;letter-spacing:-.02em}
+  .round-tile .rt-desc{color:var(--muted);font-size:.86rem;flex:1}
+  .round-tile .rt-count{font-family:var(--mono);font-size:.72rem;color:var(--faint)}
+
+  .home-section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.6rem 1.6rem;margin:1rem 0}
+  .home-section h2{margin:.2rem 0 .9rem;font-size:1.25rem;font-weight:800;letter-spacing:-.01em}
+  .home-section p{margin:.5rem 0;color:var(--muted)}
+  .home-section strong{color:var(--ink)}
+  .formats{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem;margin-top:1rem}
+  .format{background:var(--surface2);border-radius:12px;padding:1rem 1.1rem}
+  .format h3{margin:0 0 .4rem;font-size:1rem;font-weight:800}
+  .format p{margin:0;font-size:.88rem;color:var(--muted)}
+
+  .numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1rem}
+  .num-card{background:var(--surface2);border-radius:12px;padding:1rem 1.1rem}
+  .num-card .big{font-size:2rem;font-weight:900;letter-spacing:-.03em;color:var(--acc);font-variant-numeric:tabular-nums}
+  .num-card p{margin:.3rem 0 0;font-size:.85rem;color:var(--muted)}
+
+  .golden{border:2px solid var(--acc);background:linear-gradient(0deg,var(--v-misto-bg),transparent 70%),var(--surface)}
+  .golden p{color:var(--ink)}
+
+  .sources{columns:2;column-gap:2rem;font-size:.85rem;color:var(--muted);margin:0;padding-left:1.1rem}
+  .sources li{margin-bottom:.45rem;break-inside:avoid}
+  @media (max-width:640px){.sources{columns:1}}
+
+  /* ---------- GAME SHELL ---------- */
+  .shell{min-height:100vh;display:flex;flex-direction:column}
+  .topbar{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line);
+    background:var(--surface);position:sticky;top:0;z-index:20}
+  .topbar .round-name{font-weight:800;font-size:.95rem;letter-spacing:.02em;white-space:nowrap}
+  .btn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;
+    padding:.5rem .95rem;font-size:.88rem;font-weight:600;transition:border-color .12s ease}
+  .btn:hover{border-color:var(--acc)}
+  .btn-acc{background:var(--acc);color:var(--acc-ink);border:none;font-weight:800}
+  .btn-acc:hover{filter:brightness(1.06)}
+  .btn:disabled{opacity:.35;cursor:default}
+  .btn:disabled:hover{border-color:var(--line)}
+
+  .dots{display:flex;gap:.42rem;flex:1;justify-content:center;flex-wrap:wrap}
+  .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--faint);background:transparent;padding:0}
+  .dot.done{background:var(--faint);border-color:var(--faint)}
+  .dot.cur{border-color:var(--acc);background:var(--acc)}
+
+  .stage{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1.2rem 7.5rem}
+  .card{width:100%;max-width:880px;background:var(--surface);border:1px solid var(--line);border-radius:20px;
+    box-shadow:var(--shadow);padding:2.4rem 2.6rem 2.6rem;position:relative;overflow:hidden}
+  @media (max-width:640px){.card{padding:1.6rem 1.3rem 2rem}}
+  .card .ex-title{font-size:clamp(1.7rem,4.5vw,2.6rem);font-weight:900;letter-spacing:-.025em;line-height:1.08;margin:.5rem 0 1rem;text-wrap:balance}
+  .card .ex-desc{font-size:1.08rem;color:var(--muted);max-width:62ch;margin:0 0 1.2rem}
+  .card .ex-desc strong{color:var(--ink)}
+
+  .poem{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.4rem,3.4vw,2rem);line-height:1.5;
+    background:var(--surface2);border-radius:14px;padding:1.6rem 2rem;margin:0 0 1.4rem;white-space:pre-line;font-style:italic}
+  .poem .tr{display:block;font-family:var(--sans);font-style:normal;font-size:.8rem;color:var(--faint);margin-top:1rem;white-space:normal}
+
+  .cerca{display:inline-flex;align-items:center;gap:.55rem;background:var(--surface2);border:1px dashed var(--line);
+    border-radius:10px;padding:.55rem .9rem;font-family:var(--mono);font-size:.85rem;color:var(--muted);margin-bottom:.4rem;max-width:100%}
+  .cerca b{color:var(--ink);font-weight:600;word-break:break-word}
+
+  .vote-strip{display:flex;align-items:center;gap:.8rem;margin-top:1.6rem;flex-wrap:wrap}
+  .vote-strip .label{margin-right:.2rem}
+  .vote-opt{font-weight:900;font-size:1.15rem;letter-spacing:.04em;padding:.45rem 1.1rem;border-radius:10px;border:2px solid}
+  .vote-opt.o-ai{color:var(--v-ai);border-color:var(--v-ai);background:var(--v-ai-bg)}
+  .vote-opt.o-real{color:var(--v-real);border-color:var(--v-real);background:var(--v-real-bg)}
+  .vote-vs{font-family:var(--mono);color:var(--faint);font-size:.8rem}
+
+  /* reveal */
+  .reveal{margin-top:1.8rem;border-top:1px solid var(--line);padding-top:1.6rem}
+  .stamp-row{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;margin-bottom:1.3rem}
+  .stamp{display:inline-block;font-size:clamp(2rem,6vw,3.4rem);font-weight:900;letter-spacing:.02em;line-height:1;
+    padding:.35em .5em;border:5px solid;border-radius:14px;transform:rotate(-4deg);
+    animation:stampIn .28s cubic-bezier(.2,1.6,.4,1) both}
+  @keyframes stampIn{from{transform:rotate(-14deg) scale(2.1);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:1}}
+  @media (prefers-reduced-motion:reduce){.stamp{animation:none}}
+  .stamp.v-ai{color:var(--v-ai);border-color:var(--v-ai);background:var(--v-ai-bg)}
+  .stamp.v-real{color:var(--v-real);border-color:var(--v-real);background:var(--v-real-bg)}
+  .stamp.v-misto{color:var(--v-misto);border-color:var(--v-misto);background:var(--v-misto-bg)}
+  .stamp.v-falso{color:var(--v-falso);border-color:var(--v-falso);background:var(--v-falso-bg)}
+  .stamp-note{color:var(--muted);font-size:.95rem;max-width:26rem}
+
+  .reveal-block{background:var(--surface2);border-radius:12px;padding:1rem 1.2rem;margin-top:.9rem}
+  .reveal-block .label{display:block;margin-bottom:.35rem}
+  .reveal-block p{margin:0;font-size:1.02rem}
+  .reveal-block.disc{border-left:4px solid var(--acc)}
+  .links{margin-top:.9rem;font-family:var(--mono);font-size:.78rem;color:var(--faint);word-break:break-all}
+  .links a{color:var(--acc-dim)}
+
+  .controls{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:.9rem;
+    padding:1rem 1.2rem calc(1rem + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);z-index:15}
+  .controls .btn{min-width:8.5rem}
+  .controls .btn-reveal{min-width:13rem;font-size:1.05rem;padding:.75rem 1.4rem;border-radius:12px}
+  @media (max-width:560px){.controls .btn{min-width:0}.controls .btn-reveal{min-width:0;flex:1}}
+
+  /* round intro */
+  .rintro{text-align:center;max-width:640px}
+  .rintro .big-name{font-size:clamp(2.6rem,8vw,4.4rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin:.6rem 0 1rem}
+  .rintro p{color:var(--muted);font-size:1.05rem;text-align:left}
+  .rintro .stat{background:var(--surface2);border-radius:12px;padding:1rem 1.2rem;margin-top:1.2rem;text-align:left;font-size:.95rem}
+  .rintro .stat b{color:var(--acc)}
+
+  /* scoreboard */
+  .score-drawer{position:fixed;top:0;right:0;bottom:0;width:min(320px,88vw);background:var(--surface);
+    border-left:1px solid var(--line);z-index:40;padding:1.4rem 1.3rem;transform:translateX(105%);transition:transform .2s ease;
+    display:flex;flex-direction:column;gap:.9rem;box-shadow:var(--shadow)}
+  .score-drawer.open{transform:translateX(0)}
+  @media (prefers-reduced-motion:reduce){.score-drawer{transition:none}}
+  .score-head{display:flex;justify-content:space-between;align-items:center}
+  .score-head h3{margin:0;font-size:1.05rem;font-weight:800}
+  .team{display:flex;align-items:center;gap:.6rem;background:var(--surface2);border-radius:12px;padding:.7rem .8rem}
+  .team .tname{flex:1;font-weight:700;font-size:.92rem;border-radius:6px;padding:.15rem .3rem;min-width:0;overflow-wrap:anywhere}
+  .team .tscore{font-family:var(--mono);font-size:1.4rem;font-weight:700;min-width:2.2rem;text-align:center;font-variant-numeric:tabular-nums}
+  .tbtn{width:2.1rem;height:2.1rem;border-radius:8px;border:1px solid var(--line);background:var(--surface);
+    color:var(--ink);font-size:1.15rem;font-weight:800;line-height:1}
+  .tbtn:hover{border-color:var(--acc)}
+  .score-hint{font-size:.78rem;color:var(--faint);margin-top:auto}
+  .score-reset{align-self:flex-start}
+
+  .kbd-hint{font-family:var(--mono);font-size:.7rem;color:var(--faint);text-align:center;margin-top:2.2rem}
+  kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:.05rem .4rem;background:var(--surface)}
+</style>
+
+<div id="app"></div>
+<div class="score-drawer" id="scoreDrawer" aria-label="Segnapunti">
+  <div class="score-head"><h3>Segnapunti</h3><button class="btn" onclick="toggleScore(false)">Chiudi ✕</button></div>
+  <div id="teams"></div>
+  <button class="btn score-reset" onclick="resetScore()">Azzera punteggi</button>
+  <p class="score-hint">1 punto a risposta giusta, +1 bonus se la squadra indica un indizio corretto prima della rivelazione. I nomi si modificano cliccandoci sopra.</p>
+</div>
+
+<script>
+"use strict";
+
+/* ---------------- DATA ---------------- */
+const VERDICTS = {
+  AI:    { cls:"v-ai",    label:"AI" },
+  REALE: { cls:"v-real",  label:"REALE" },
+  UMANO: { cls:"v-real",  label:"UMANO" },
+  MISTO: { cls:"v-misto", label:"MISTO" },
+  FALSO: { cls:"v-falso", label:"FALSO (non AI)" }
+};
+
+const ROUNDS = [
+{
+  id:"foto", name:"FOTO", opts:["AI","REALE"],
+  tileDesc:"Immagini vere, generate… e un falso storico del 1934.",
+  intro:"Prima della lezione, cerca ogni immagine con la ricerca indicata e tienila pronta da proiettare. La classe guarda in silenzio, poi vota: AI o REALE?",
+  items:[
+  { title:"Katy Perry al Met Gala 2024",
+    desc:"Abito floreale sul red carpet. Perry quella sera non c'era: persino sua madre ci cascò («Non sapevo fossi andata al Met!»).",
+    cerca:"Katy Perry Met Gala AI", answer:"AI",
+    indizi:"La moquette della scalinata non corrisponde a quella vera dell'evento; i bordi dell'abito sono fusi col fondo.",
+    disc:"Se ci casca la madre, il «la conosco bene» non basta." },
+  { title:"PSEUDOMNESIA: The Electrician (B. Eldagsen, 2023)",
+    desc:"Ritratto in bianco e nero stile anni '40. Vinse il Sony World Photography Award; l'autore rifiutò il premio rivelando che era DALL·E 2.",
+    cerca:"Eldagsen The Electrician", answer:"AI",
+    indizi:"Mani e dita anomale, luce «d'epoca» troppo pulita.",
+    disc:"Ha ingannato una giuria di esperti di fotografia." },
+  { title:"Deadvlei, Namibia",
+    desc:"Alberi neri morti da ~700 anni su argilla bianca, dune rosse, cielo blu: sembra un rendering.",
+    cerca:"Deadvlei Namibia", answer:"REALE",
+    indizi:"Reperibile su Google Maps e in migliaia di foto di viaggiatori da angolazioni diverse.",
+    disc:"I luoghi veri hanno mille testimoni, i finti uno solo." },
+  { title:"«Trump arrestato» (E. Higgins, marzo 2023)",
+    desc:"Sequenza Midjourney diventata virale mondiale prima di qualsiasi arresto vero.",
+    cerca:"Trump arrest AI images Higgins", answer:"AI",
+    indizi:"Gambe e cinture dei poliziotti fuse, volti sfocati dietro, scritte illeggibili sulle divise.",
+    disc:"Foto «di cronaca» di eventi mai avvenuti." },
+  { title:"Montagne arcobaleno di Zhangye Danxia (Cina)",
+    desc:"Rilievi a strisce rosse, gialle e verdi.",
+    cerca:"Zhangye Danxia", answer:"REALE",
+    indizi:"Colori veri (strati minerali), spesso saturati in post-produzione.",
+    disc:"Reale non significa non ritoccato." },
+  { title:"Esplosione al Pentagono (maggio 2023)",
+    desc:"Foto di un'esplosione mai avvenuta, rilanciata da account «verificati»: fece brevemente calare la borsa USA.",
+    cerca:"Pentagon explosion fake AI", answer:"AI",
+    indizi:"La recinzione si fonde con l'edificio; nessuna altra foto o video dello stesso evento.",
+    disc:"Un falso può muovere soldi veri in minuti." },
+  { title:"Nube lenticolare sul Monte Fuji",
+    desc:"Disco perfetto «da UFO» posato sulla vetta.",
+    cerca:"nube lenticolare Fuji", answer:"REALE",
+    indizi:"Fenomeno meteo documentato da decenni, su siti scientifici e webcam locali.",
+    disc:"La natura produce forme che sembrano impossibili." },
+  { title:"Théâtre d'Opéra Spatial (J. Allen, 2022)",
+    desc:"Opera generata con Midjourney: vinse il primo premio d'arte digitale alla fiera del Colorado.",
+    cerca:"Théâtre d'Opéra Spatial", answer:"AI",
+    indizi:"Figure senza volto, dettagli architettonici che non «chiudono».",
+    disc:"È arte? Di chi è il merito: del prompt o del modello?" },
+  { title:"Il mostro di Loch Ness (1934)",
+    desc:"La celebre «foto del chirurgo» con il collo che emerge dal lago.",
+    cerca:"surgeon's photograph Loch Ness", answer:"FALSO",
+    indizi:"Era un giocattolo su un sottomarino di latta, confessato nel 1994.",
+    disc:"Colpo di scena: i falsi esistono da un secolo; l'AI ha solo azzerato il costo." },
+  { title:"Granchio del cocco (Birgus latro)",
+    desc:"Artropode terrestre gigante fotografato mentre scala un bidone: sembra AI-slop da Facebook.",
+    cerca:"coconut crab", answer:"REALE",
+    indizi:"Documentato da National Geographic e ricerche zoologiche.",
+    disc:"La natura supera spesso l'immaginazione dei modelli." }
+]},
+{
+  id:"musica", name:"MUSICA", opts:["AI","UMANO"],
+  tileDesc:"Voci clonate, vocoder d'epoca e una band che non esiste.",
+  intro:"Fai ascoltare 30–60 secondi a occhi chiusi. Tutti i brani sono reperibili su YouTube o Spotify con la ricerca indicata. Poi si vota: AI o UMANO?",
+  items:[
+  { title:"The Velvet Sundown — «Dust on the Wind»",
+    desc:"Band psych-rock «anni '70» esplosa su Spotify nell'estate 2025: oltre 1 milione di ascoltatori mensili prima di confessare di essere interamente AI (una «provocazione artistica»).",
+    cerca:"The Velvet Sundown (Spotify/YouTube)", answer:"AI",
+    indizi:"Voce leggermente ovattata, batteria piatta, foto della band plasticose, nessun concerto o intervista dal vivo.",
+    disc:"L'indizio decisivo è l'assenza di storia verificabile, non il suono." },
+  { title:"«Heart on My Sleeve» — Ghostwriter977 (2023)",
+    desc:"Il falso duetto Drake + The Weeknd con voci clonate: milioni di ascolti, poi rimosso dalle piattaforme su richiesta della casa discografica.",
+    cerca:"Heart on My Sleeve AI Drake (servizi giornalistici su YouTube)", answer:"AI",
+    indizi:"Le voci sono cloni quasi perfetti: qui l'orecchio non basta.",
+    disc:"A chi appartiene una voce?" },
+  { title:"Cher — «Believe» (1998)",
+    desc:"Il celebre effetto «voce robotica» nel ritornello.",
+    cerca:"Cher Believe", answer:"UMANO",
+    indizi:"È Auto-Tune estremo, non AI: la manipolazione vocale esiste da prima di ChatGPT.",
+    disc:"«Suona finto» non significa «generato»." },
+  { title:"Imogen Heap — «Hide and Seek» (2005)",
+    desc:"Solo voce, ma sembra un coro di sintetizzatori.",
+    cerca:"Imogen Heap Hide and Seek", answer:"UMANO",
+    indizi:"Harmonizer/vocoder su una voce vera, cantata dal vivo nei concerti: prova verificabile.",
+    disc:"Un effetto non rende artificiale la cantante." },
+  { title:"The Beatles — «Now and Then» (2023)",
+    desc:"«L'ultima canzone dei Beatles», con la voce di John Lennon (morto nel 1980).",
+    cerca:"Beatles Now and Then", answer:"MISTO",
+    indizi:"L'AI ha separato la voce vera di Lennon da una vecchia demo: restauro, non generazione.",
+    disc:"Discussione chiave: AI-strumento vs AI-autore." },
+  { title:"«BBL Drizzy» (2024)",
+    desc:"Brano soul generato con AI (Udio) da un comico, poi campionato dal produttore Metro Boomin in un beat vero: primo sample AI mainstream.",
+    cerca:"BBL Drizzy", answer:"MISTO",
+    indizi:"Origine AI + lavoro creativo umano sopra.",
+    disc:"Dove passa il confine del «chi è l'autore»?" },
+  { title:"Randy Travis — «Where That Came From» (2024)",
+    desc:"Il cantante country perse la voce per un ictus nel 2013; l'etichetta l'ha ricreata con AI, col suo consenso.",
+    cerca:"Randy Travis AI song", answer:"AI",
+    indizi:"Voce AI autorizzata e dichiarata.",
+    disc:"Etica: è diverso da Ghostwriter977? Perché?" },
+  { title:"Hit trap italiana con autotune spinto",
+    desc:"Scegli un brano che i ragazzi conoscono: qualsiasi hit recente molto processata.",
+    cerca:"playlist Trap Italia", answer:"UMANO",
+    indizi:"Ribaltamento dell'esercizio 3, con materiale loro.",
+    disc:"Processato ≠ generato." },
+  { title:"Canzone fai-da-te con Suno",
+    desc:"Prima della lezione, genera in 2 minuti una canzone su un argomento del programma (es. «la fotosintesi» in stile trap o pop-punk).",
+    cerca:"suno.com (account gratuito)", answer:"AI",
+    indizi:"Effetto garantito in classe; pronuncia italiana a volte incerta, rime prevedibili.",
+    disc:"Mostra POI il prompt usato: demistifica." },
+  { title:"Daft Punk — «Harder, Better, Faster, Stronger» (2001)",
+    desc:"Voci interamente robotiche.",
+    cerca:"Daft Punk Harder Better", answer:"UMANO",
+    indizi:"Vocoder e talk box, 25 anni fa.",
+    disc:"Chiusura del round: da Cher ai Daft Punk, il «suono artificiale» è una scelta estetica umana." }
+]},
+{
+  id:"testi", name:"TESTI", opts:["AI","UMANO"],
+  tileDesc:"Poesie, auguri, recensioni e notizie: la parola nuda.",
+  intro:"Proietta il testo nudo, senza autore né contesto. Gli esercizi 5–10 vanno preparati prima della lezione (le istruzioni sono su ogni carta).",
+  stat:"Da citare a fine round: uno studio su 1.634 persone (Porter & Machery, Scientific Reports, 2024) ha mostrato che i lettori riconoscono le poesie AI meno del caso (<b>46,6%</b>) e giudicano le poesie AI «più umane» di quelle di Dickinson o Shakespeare.",
+  items:[
+  { title:"Poesia brevissima",
+    poem:"M'illumino\nd'immenso.",
+    answer:"UMANO",
+    indizi:"Giuseppe Ungaretti, «Mattina», 1917. Molti voteranno AI («troppo corta, troppo facile»).",
+    disc:"La brevità estrema è una scelta radicale umana, scritta in trincea." },
+  { title:"Poesia breve «in stile Ungaretti»",
+    poem:"Tramonto:\nmi spengo\npiano\ncome il giorno.",
+    answer:"AI",
+    indizi:"Generata da un modello linguistico per questa guida. Immagine coerente ma prevedibile; il paragone «come il giorno» chiude troppo bene.",
+    disc:"L'AI produce poesie «levigate»; gli umani si prendono rischi." },
+  { title:"Quartina inglese",
+    poem:"We never know how high we are\nTill we are asked to rise;\nAnd then, if we are true to plan,\nOur statures touch the skies —",
+    poemTr:"«Non sappiamo mai quanto siamo alti / finché non ci chiedono di alzarci…»",
+    answer:"UMANO",
+    indizi:"Emily Dickinson (pubblico dominio).",
+    disc:"Anche i classici possono «suonare AI» a un orecchio moderno." },
+  { title:"Quartina «in stile Dickinson»",
+    poem:"The quiet keeps a secret door\nWhere morning folds its light —\nI ask the dust what it is for,\nIt answers me with night.",
+    answer:"AI",
+    indizi:"Generata per questa guida, replicando il metodo dello studio del 2024. Suona «profonda» ma non significa nulla di preciso.",
+    disc:"Profondità simulata per accumulo di immagini: è esattamente ciò che inganna i lettori nello studio." },
+  { title:"Messaggio di auguri WhatsApp",
+    desc:"Un augurio vero scritto da un amico vs uno generato («scrivi un augurio di compleanno per un amico di 14 anni»). Prepara le due versioni prima della lezione con ChatGPT/Gemini.",
+    cerca:"fai-da-te con ChatGPT/Gemini", answer:"MISTO",
+    indizi:"Indizi AI: troppo completo, zero errori, emoji «da catalogo», nessun riferimento privato (soprannomi, fatti condivisi).",
+    disc:"Il messaggio vero è imperfetto ma personale." },
+  { title:"Recensione di un ristorante",
+    desc:"Una recensione TripAdvisor vera (con refusi e dettagli inutili) vs una generata sullo stesso ristorante.",
+    cerca:"fai-da-te + TripAdvisor", answer:"MISTO",
+    indizi:"L'AI resta generica («ottimo rapporto qualità-prezzo», «personale cordiale»); il vero recensore litiga sul parcheggio e sul cameriere di nome Gino.",
+    disc:"I dettagli inutili sono la firma del vissuto." },
+  { title:"Notizia assurda ma VERA",
+    desc:"«Nel 1932 l'Australia dichiarò guerra agli emù, con mitragliatrici. Persero gli umani.»",
+    cerca:"Emu War (Wikipedia)", answer:"REALE",
+    indizi:"Verificabile su fonti storiche.",
+    disc:"La realtà è spesso meno plausibile della finzione." },
+  { title:"Notizia plausibile ma INVENTATA",
+    desc:"«Milano sperimenta semafori con riconoscimento dei monopattini che multano automaticamente chi passa col rosso.» (scritta dall'AI per questa guida)",
+    cerca:"provare a cercarla: non esiste", answer:"AI",
+    indizi:"Suona vera perché è costruita su cose vere (Milano, monopattini, multe).",
+    disc:"Metodo: cercarla; se nessuna testata la riporta, è un allarme rosso." },
+  { title:"Tema scolastico",
+    desc:"Un paragrafo di tema di uno studente vero (anonimo, di un altro anno) vs lo stesso titolo svolto da ChatGPT.",
+    cerca:"fai-da-te", answer:"MISTO",
+    indizi:"Indizi AI: struttura perfetta introduzione–3 punti–conclusione, connettivi da manuale («inoltre», «in conclusione»), nessuna opinione spigolosa o esperienza personale concreta.",
+    disc:"La voce personale è la cosa più difficile da imitare." },
+  { title:"Proverbio vero vs inventato",
+    desc:"«Chi non ha testa abbia gambe» (vero) vs «Il vento non chiede permesso alla montagna» (inventato dall'AI: suona saggio, non esiste).",
+    cerca:"verificare su un dizionario dei proverbi", answer:"MISTO",
+    indizi:"L'AI è bravissima a produrre «saggezza sintetica».",
+    disc:"Collega alla quartina finta-Dickinson: profondità simulata." }
+]},
+{
+  id:"video", name:"VIDEO", opts:["AI","REALE"],
+  tileDesc:"Il formato dove i ragazzi incontrano l'AI ogni giorno.",
+  intro:"Il round oggi più importante: è il formato che i ragazzi consumano ogni giorno. Tutti i video si trovano su YouTube/TikTok con la ricerca indicata (i link diretti compaiono dopo la rivelazione).",
+  items:[
+  { title:"Will Smith mangia spaghetti (2023 vs 2025)",
+    desc:"Il video-simbolo degli orrori AI del 2023, confrontato con le versioni realistiche del 2025.",
+    cerca:"Will Smith spaghetti AI 2023 vs 2025", answer:"AI",
+    indizi:"Apri il round così: due anni di progresso in 30 secondi.",
+    disc:"Gli indizi visivi hanno una data di scadenza." },
+  { title:"Coniglietti sul trampolino (luglio 2025)",
+    desc:"Finto video di videosorveglianza notturna: oltre 230 milioni di visualizzazioni su TikTok, ha ingannato mezzo internet.",
+    cerca:"bunnies trampoline AI", answer:"AI",
+    indizi:"Al secondo 6 un coniglio sparisce; un altro ha per un attimo due teste.",
+    disc:"Lo stile «telecamera di sicurezza» abbassa le difese: bassa qualità = credibilità.",
+    links:["https://www.tiktok.com/@rachelthecatlovers/video/7531584773500751118","https://www.snopes.com/fact-check/rabbits-jumping-trampoline-video/"] },
+  { title:"Canguro «di supporto emotivo» in aeroporto (maggio 2025)",
+    desc:"Canguro con carta d'imbarco in zampa mentre una donna discute con la hostess. Creato dall'artista VFX @infiniteunreality; virale su X quando fu ripostato senza dichiararlo AI.",
+    cerca:"emotional support kangaroo AI", answer:"AI",
+    indizi:"La «lingua» parlata non esiste; testi sui cartelli illeggibili.",
+    disc:"Ha ingannato anche utenti esperti.",
+    links:["https://knowyourmeme.com/memes/emotional-support-kangaroo-rejected-entry-to-plane"] },
+  { title:"Vlog dello Yeti/Bigfoot (Veo 3, 2025)",
+    desc:"La creatura si filma in selfie-vlog nella foresta, con voce e ambiente generati insieme. È un format: decine di creator lo replicano.",
+    cerca:"Bigfoot vlog Veo 3", answer:"AI",
+    indizi:"Contenuto dichiaratamente assurdo ma tecnicamente perfetto: audio e video generati in un colpo solo.",
+    disc:"La qualità tecnica non è più un indizio.",
+    links:["https://www.youtube.com/results?search_query=bigfoot+vlog+veo+3"] },
+  { title:"Italian brainrot (Tralalero Tralala, Ballerina Cappuccina)",
+    desc:"I personaggi che i ragazzi già conoscono, nati a gennaio 2025: squalo con le Nike, ballerina-cappuccino.",
+    cerca:"Italian brainrot", answer:"AI",
+    indizi:"Rivelazione utile: immagini E voce «italiana» sono sintetiche al 100%.",
+    disc:"Contenuti che consumano ogni giorno senza chiedersi chi li produce, e perché (views = soldi).",
+    links:["https://en.wikipedia.org/wiki/Italian_brainrot","https://www.youtube.com/watch?v=If9jjH4Y7d8"] },
+  { title:"Bodycam: poliziotto ferma Super Mario (Sora 2, 2025)",
+    desc:"Finto video da telecamera di servizio, prospettiva e coerenza impressionanti. Originale di Rory Flynn (@Ror_Fly), ottobre 2025.",
+    cerca:"Sora 2 Mario bodycam", answer:"AI",
+    indizi:"Anche i formati «documentali» (bodycam, dashcam, CCTV) si generano.",
+    disc:"Il formato non è più garanzia.",
+    links:["https://www.youtube.com/watch?v=UqnDxZV4LT8"] },
+  { title:"Murmuration di storni su Roma",
+    desc:"Migliaia di uccelli che disegnano forme fluide nel cielo: sembra CGI.",
+    cerca:"storni Roma murmuration", answer:"REALE",
+    indizi:"Fenomeno filmato da secoli di testimoni e documentari; decine di angolazioni diverse dello stesso evento.",
+    disc:"Chicca: il Nobel Giorgio Parisi ha scoperto che ogni storno interagisce con 6–7 vicini — ecco il movimento fluido.",
+    links:["https://www.youtube.com/watch?v=jgdbVpHU1-w"] },
+  { title:"Drone FPV dentro il vulcano (Islanda, 2021)",
+    desc:"Volo radente nella bocca del vulcano Fagradalsfjall in eruzione. Pilota: Björn Steinbekk.",
+    cerca:"FPV drone volcano Iceland", answer:"REALE",
+    indizi:"Sembra un videogioco; è un pilota di drone. Alcuni droni si sono fusi in diretta: prova fisica.",
+    disc:"L'incredibile può essere documentato.",
+    links:["https://www.youtube.com/watch?v=DQx96G4yHd8","https://www.youtube.com/watch?v=j18ECUhkeY0"] },
+  { title:"@deeptomcruise (TikTok, 2021)",
+    desc:"«Tom Cruise» fa magie e gioca a golf: deepfake del VFX artist Chris Umé sul corpo e la voce del sosia-attore Miles Fisher.",
+    cerca:"deeptomcruise", answer:"AI",
+    indizi:"Faceswap su corpo vero, non generazione totale: la famiglia dei falsi è varia. Ogni clip richiedeva settimane di CGI/VFX + deepfake, non un clic.",
+    disc:"Confronta con il prossimo esercizio: stesso attore.",
+    links:["https://www.tiktok.com/@deeptomcruise","https://flowingdata.com/2021/03/10/deeptomcruise-breakdown/"] },
+  { title:"Tom Cruise: salto in moto dalla rupe",
+    desc:"Dietro le quinte dello stunt di Mission: Impossible – Dead Reckoning: sembra finto, è vero. Moto giù da una rupe in Norvegia + base jump, ripetuto 6–8 volte in un giorno, ripreso da terra, droni ed elicotteri proprio per dimostrare che era davvero lui.",
+    cerca:"Mission Impossible bike jump behind the scenes", answer:"REALE",
+    indizi:"Chiusura perfetta: il vero Cruise fa cose «impossibili», il falso Cruise fa cose banali.",
+    disc:"Il «non può essere vero» non è un criterio.",
+    links:["https://www.youtube.com/watch?v=-lsFs2615gw","https://www.youtube.com/watch?v=fLcIx1qQAyY"] }
+]}
+];
+
+const SOURCES = [
+  "Porter & Machery, «AI-generated poetry is indistinguishable…», Scientific Reports 2024",
+  "Rolling Stone — The Velvet Sundown confirm they're AI (2025)",
+  "Wikipedia — Heart on My Sleeve (Ghostwriter977)",
+  "Washington Post — Fooled by trampoline bunnies (2025)",
+  "Dazed — How an AI kangaroo tricked the internet (2025)",
+  "NPR — Katy Perry's mom fell for AI Met Gala photo (2024)",
+  "Scientific American — How my AI image won a photography competition (Eldagsen)",
+  "TechCrunch — Balenciaga Pope and AI images (2023)",
+  "Wikipedia — Italian brainrot",
+  "Snopes — Rabbits jumping on trampoline video (2025)"
+];
+
+/* ---------------- STATE ---------------- */
+let view = { name:"home" };            // home | intro | card
+let revealed = {};                     // "roundIdx-itemIdx" -> true
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+/* ---------------- RENDER ---------------- */
+function render(){
+  if(view.name==="home") renderHome();
+  else if(view.name==="intro") renderIntro(view.r);
+  else renderCard(view.r, view.i);
+  window.scrollTo(0,0);
+}
+
+function renderHome(){
+  app.innerHTML = `
+  <div class="home">
+    <div class="hero">
+      <div class="eyebrow">Gioco a squadre per ragazzi 11–15 · si gioca in cerchio davanti allo schermo</div>
+      <h1 class="hero-title">AI <span class="oppure">o</span> NON AI?</h1>
+      <p class="hero-sub">Guardate, ascoltate, leggete. Poi votate: è fatto con l'intelligenza artificiale, o no?
+      40 esercizi in 4 round — e qualche colpo di scena.</p>
+      <div class="hero-badges">
+        <span class="pill">4 round</span><span class="pill">40 esercizi</span>
+        <span class="pill">Punteggio a squadre</span><span class="pill">Conduzione: 1 adulto + 1 schermo</span>
+      </div>
+    </div>
+
+    <div class="round-grid">
+      ${ROUNDS.map((r,idx)=>`
+        <button class="round-tile" onclick="goIntro(${idx})">
+          <span class="rt-num">ROUND ${idx+1}</span>
+          <span class="rt-name">${r.name}</span>
+          <span class="rt-desc">${r.tileDesc}</span>
+          <span class="rt-count">${r.items.length} esercizi · ${countDone(idx)}/${r.items.length} rivelati</span>
+        </button>`).join("")}
+    </div>
+
+    <section class="home-section">
+      <h2>Come si gioca</h2>
+      <p>I ragazzi sono <strong>disposti in cerchio</strong> davanti allo schermo. Il conduttore mostra un contenuto
+      (foto, brano, testo o video), la classe discute e vota, poi si preme <strong>RIVELA</strong>. Ogni carta ha
+      gli indizi da far notare e una domanda di discussione.</p>
+      <div class="formats">
+        <div class="format"><h3>🏆 Torneo a squadre</h3><p>4 squadre, un round a testa per categoria. 1 punto a risposta giusta + 1 bonus se indicano un indizio corretto prima della rivelazione. Usa il segnapunti in alto a destra.</p></div>
+        <div class="format"><h3>↔️ Angoli dell'aula</h3><p>Lato sinistro = AI, lato destro = UMANO/REALE. Ci si sposta fisicamente, poi si rivela.</p></div>
+        <div class="format"><h3>⚖️ Difensore d'ufficio</h3><p>Prima del voto, uno studente estratto a sorte deve argomentare la tesi opposta alla maggioranza.</p></div>
+      </div>
+    </section>
+
+    <section class="home-section">
+      <h2>Numeri che colpiscono <span class="label">— da rivelare a fine partita</span></h2>
+      <div class="numbers">
+        <div class="num-card"><div class="big">46,6%</div><p>accuratezza media nel riconoscere poesie AI — peggio del lancio di una moneta (studio su 1.634 persone, 2024)</p></div>
+        <div class="num-card"><div class="big">~230 mln</div><p>visualizzazioni dei coniglietti AI sul trampolino prima dello smascheramento (2025)</p></div>
+        <div class="num-card"><div class="big">1 mln+</div><p>ascoltatori mensili su Spotify della band AI The Velvet Sundown prima della confessione (2025)</p></div>
+        <div class="num-card"><div class="big">Minuti</div><p>il tempo in cui la finta foto del Pentagono ha fatto calare la borsa americana (2023)</p></div>
+      </div>
+    </section>
+
+    <section class="home-section golden">
+      <h2>🥇 La regola d'oro da lasciare alla classe</h2>
+      <p>Gli indizi visivi (mani, scritte, ombre) sono utili oggi e inutili domani. Il metodo che non scade:
+      <strong>fermarsi, cercare la fonte, cercare conferme indipendenti.</strong> Chi l'ha pubblicato per primo?
+      Lo riporta una testata affidabile? La ricerca inversa dell'immagine (Google Lens) cosa mostra?</p>
+      <p><strong>Vince chi verifica, non chi ha l'occhio.</strong></p>
+    </section>
+
+    <section class="home-section">
+      <h2>Fonti principali</h2>
+      <ul class="sources">${SOURCES.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>
+    </section>
+
+    <p class="kbd-hint">Durante il gioco: <kbd>←</kbd> <kbd>→</kbd> naviga · <kbd>spazio</kbd> rivela · <kbd>Esc</kbd> menu · <kbd>P</kbd> punteggio</p>
+  </div>`;
+}
+
+function renderIntro(r){
+  const R = ROUNDS[r];
+  app.innerHTML = `
+  <div class="shell">
+    ${topbar(r,null)}
+    <div class="stage">
+      <div class="card rintro">
+        <div class="eyebrow">Round ${r+1} · ${R.items.length} esercizi</div>
+        <div class="big-name">${R.name}</div>
+        <p>${R.intro}</p>
+        ${R.stat ? `<div class="stat">📊 ${R.stat}</div>` : ""}
+        <div class="vote-strip" style="justify-content:center">
+          <span class="label">La classe vota</span>
+          <span class="vote-opt o-ai">${R.opts[0]}</span><span class="vote-vs">vs</span>
+          <span class="vote-opt o-real">${R.opts[1]}</span>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="goHome()">← Menu</button>
+      <button class="btn btn-acc btn-reveal" onclick="goCard(${r},0)">Inizia il round →</button>
+    </div>
+  </div>`;
+}
+
+function renderCard(r,i){
+  const R = ROUNDS[r], it = R.items[i];
+  const key = r+"-"+i, isRev = !!revealed[key];
+  const v = VERDICTS[it.answer];
+  app.innerHTML = `
+  <div class="shell">
+    ${topbar(r,i)}
+    <div class="stage">
+      <div class="card">
+        <div class="eyebrow">Round ${R.name} · Esercizio ${i+1} di ${R.items.length}</div>
+        <h2 class="ex-title">${it.title}</h2>
+        ${it.desc ? `<p class="ex-desc">${it.desc}</p>` : ""}
+        ${it.poem ? `<div class="poem">${esc(it.poem)}${it.poemTr?`<span class="tr">${esc(it.poemTr)}</span>`:""}</div>` : ""}
+        ${it.cerca ? `<div class="cerca">🔎 Cerca: <b>${esc(it.cerca)}</b></div>` : ""}
+        <div class="vote-strip">
+          <span class="label">La classe vota</span>
+          <span class="vote-opt o-ai">${R.opts[0]}</span><span class="vote-vs">vs</span>
+          <span class="vote-opt o-real">${R.opts[1]}</span>
+        </div>
+        ${isRev ? `
+        <div class="reveal">
+          <div class="stamp-row">
+            <span class="stamp ${v.cls}">${v.label}</span>
+            ${it.answer==="MISTO"?`<span class="stamp-note">Origine mista: parte umana, parte AI — il bello è discutere dove passa il confine.</span>`:""}
+            ${it.answer==="FALSO"?`<span class="stamp-note">Falso, ma fabbricato da mani umane: i falsi esistevano molto prima dell'AI.</span>`:""}
+          </div>
+          <div class="reveal-block"><span class="label">Indizi</span><p>${it.indizi}</p></div>
+          <div class="reveal-block disc"><span class="label">Discussione</span><p>${it.disc}</p></div>
+          ${it.links ? `<p class="links">Link per il conduttore:<br>${it.links.map(l=>`<a href="${esc(l)}" target="_blank" rel="noopener">${esc(l)}</a>`).join("<br>")}</p>` : ""}
+        </div>` : ""}
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn" onclick="prev()">← Indietro</button>
+      ${isRev
+        ? `<button class="btn btn-acc btn-reveal" onclick="next()">${i<R.items.length-1?"Prossimo esercizio →":(r<ROUNDS.length-1?"Round successivo →":"Fine partita → Menu")}</button>`
+        : `<button class="btn btn-acc btn-reveal" onclick="reveal()">👁 RIVELA</button>`}
+      <button class="btn" onclick="next()" ${isRev?"disabled":""}>Salta →</button>
+    </div>
+  </div>`;
+}
+
+function topbar(r,i){
+  const R = ROUNDS[r];
+  return `
+  <div class="topbar">
+    <button class="btn" onclick="goHome()">☰ Menu</button>
+    <span class="round-name">Round ${r+1} · ${R.name}</span>
+    <div class="dots">${R.items.map((_,k)=>{
+      const cls = "dot"+(revealed[r+"-"+k]?" done":"")+(i===k?" cur":"");
+      return `<button class="${cls}" aria-label="Esercizio ${k+1}" onclick="goCard(${r},${k})"></button>`;
+    }).join("")}</div>
+    <button class="btn" onclick="toggleScore()">🏆 Punteggio</button>
+  </div>`;
+}
+
+/* ---------------- NAVIGATION ---------------- */
+function countDone(r){ return ROUNDS[r].items.reduce((a,_,k)=>a+(revealed[r+"-"+k]?1:0),0); }
+function goHome(){ view={name:"home"}; render(); }
+function goIntro(r){ view={name:"intro",r}; render(); }
+function goCard(r,i){ view={name:"card",r,i}; render(); }
+function reveal(){ if(view.name!=="card") return; revealed[view.r+"-"+view.i]=true; render(); }
+function next(){
+  if(view.name==="intro"){ goCard(view.r,0); return; }
+  if(view.name!=="card") return;
+  const R = ROUNDS[view.r];
+  if(view.i < R.items.length-1) goCard(view.r, view.i+1);
+  else if(view.r < ROUNDS.length-1) goIntro(view.r+1);
+  else goHome();
+}
+function prev(){
+  if(view.name!=="card") return;
+  if(view.i>0) goCard(view.r, view.i-1); else goIntro(view.r);
+}
+
+/* ---------------- SCOREBOARD ---------------- */
+const SKEY = "ainonai-score";
+let score;
+try{ score = JSON.parse(localStorage.getItem(SKEY)) || null; }catch(e){ score = null; }
+if(!Array.isArray(score) || score.length!==4)
+  score = [1,2,3,4].map(n=>({name:"Squadra "+n, pts:0}));
+
+function saveScore(){ try{ localStorage.setItem(SKEY, JSON.stringify(score)); }catch(e){} }
+function renderTeams(){
+  document.getElementById("teams").innerHTML = score.map((t,k)=>`
+    <div class="team">
+      <span class="tname" contenteditable="true" spellcheck="false" data-k="${k}">${esc(t.name)}</span>
+      <button class="tbtn" onclick="addPt(${k},-1)" aria-label="Togli un punto">−</button>
+      <span class="tscore">${t.pts}</span>
+      <button class="tbtn" onclick="addPt(${k},1)" aria-label="Aggiungi un punto">+</button>
+    </div>`).join("");
+  document.querySelectorAll(".tname").forEach(el=>{
+    el.addEventListener("blur",()=>{ score[+el.dataset.k].name = el.textContent.trim()||("Squadra "+(+el.dataset.k+1)); saveScore(); renderTeams(); });
+    el.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); el.blur(); } });
+  });
+}
+function addPt(k,d){ score[k].pts=Math.max(0,score[k].pts+d); saveScore(); renderTeams(); }
+function resetScore(){ score.forEach(t=>t.pts=0); saveScore(); renderTeams(); }
+function toggleScore(force){
+  const dr = document.getElementById("scoreDrawer");
+  const open = force!==undefined ? force : !dr.classList.contains("open");
+  dr.classList.toggle("open", open);
+}
+
+/* ---------------- KEYBOARD ---------------- */
+document.addEventListener("keydown", e=>{
+  if(e.target.isContentEditable) return;
+  if(e.key==="Escape"){ toggleScore(false); goHome(); return; }
+  if(e.key==="p"||e.key==="P"){ toggleScore(); return; }
+  if(view.name==="home") return;
+  if(e.key===" "||e.key==="Enter"){
+    e.preventDefault();
+    if(view.name==="intro"){ goCard(view.r,0); }
+    else if(!revealed[view.r+"-"+view.i]) reveal();
+    else next();
+  }
+  else if(e.key==="ArrowRight"){ e.preventDefault(); next(); }
+  else if(e.key==="ArrowLeft"){ e.preventDefault(); prev(); }
+});
+
+renderTeams();
+render();
+</script>
