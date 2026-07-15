@@ -31,6 +31,8 @@
   button:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:6px}
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc-dim);font-weight:600}
   .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
+  .rip-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);
+    border:1px solid var(--line);border-radius:999px;padding:.15rem .55rem;margin-left:.5rem;vertical-align:middle}
 
   /* home */
   .home{max-width:960px;margin:0 auto;padding:3rem 1.5rem 5rem}
@@ -74,8 +76,8 @@
   .shell{min-height:100vh;display:flex;flex-direction:column}
   .topbar{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:20}
   .topbar .tt{font-weight:800;font-size:.95rem;white-space:nowrap}
-  .dots{display:flex;gap:.42rem;flex:1;justify-content:center;flex-wrap:wrap}
-  .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--faint);background:transparent;padding:0}
+  .dots{display:flex;gap:.38rem;flex:1;justify-content:center;flex-wrap:wrap}
+  .dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--faint);background:transparent;padding:0}
   .dot.done{background:var(--faint);border-color:var(--faint)}
   .dot.cur{border-color:var(--acc);background:var(--acc)}
   .btn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;padding:.5rem .95rem;font-size:.88rem;font-weight:600}
@@ -148,120 +150,236 @@
 
 <script>
 "use strict";
-/* Tutti esempi NUOVI, non presenti nella prima partita. Risposte solo AI / VERO. */
+/* Risposte solo AI / VERO. Le sfide con old:true sono della sessione precedente (etichettate "ripasso"). */
 const CATS = [
 { id:"foto", name:"FOTO", icon:"📷",
-  tile:"Il Papa col piumino, Gesù di gamberetti e animali che sembrano inventati.",
+  tile:"Il Papa col piumino, la Willy Wonka Experience, aurore sull'Italia e animali impossibili.",
   intro:"Per ogni sfida: clic sul bottone giallo per mostrare l'immagine, timer di 20 secondi, ognuno scrive AI o VERO sul foglietto accanto al numero indicato.",
   items:[
-  { title:"Il Papa col piumino bianco",
+  { old:true, title:"Il Papa col piumino bianco",
     desc:"Marzo 2023: Papa Francesco in un piumino oversize da rapper. È la prima immagine AI creduta vera da milioni di persone.",
     link:"https://www.google.com/search?udm=2&q=pope+francis+white+puffer+jacket+AI", linkLabel:"Mostra la foto",
     answer:"AI", why:"Generata con Midjourney da un utente di Chicago «per ridere». Occhiali fusi con l'ombra, mano che impugna male la borraccia, crocifisso appeso storto.",
     comp:"Il contesto conta: una persona famosissima in una situazione «strana» merita sempre una verifica." },
-  { title:"Lo specchio del cielo — Salar de Uyuni",
+  { title:"L'aurora boreale… sull'Italia",
+    desc:"Maggio 2024: cieli rosa e viola fotografati dalle Alpi fino alla Puglia. Sembra un filtro di Instagram.",
+    link:"https://www.google.com/search?udm=2&q=aurora+boreale+italia+maggio+2024", linkLabel:"Mostra le foto",
+    answer:"VERO", why:"La tempesta solare più forte degli ultimi 20 anni rese l'aurora visibile a latitudini bassissime. Migliaia di persone diverse la fotografarono la stessa notte, e gli osservatori spaziali l'avevano prevista.",
+    comp:"Tanti testimoni indipendenti nella stessa notte + spiegazione scientifica = evento vero." },
+  { title:"La «Willy Wonka Experience» di Glasgow",
+    desc:"Febbraio 2024: locandine da sogno per un evento «immersivo» nel mondo di Wonka. Le famiglie pagano fino a 35 sterline a biglietto.",
+    link:"https://www.google.com/search?udm=2&q=willy+wonka+experience+glasgow+AI", linkLabel:"Mostra le immagini",
+    answer:"AI", why:"Le locandine erano generate con AI, con scritte senza senso tipo «catgacating». Dentro: un capannone quasi vuoto con due scenografie tristi. I bambini piansero, qualcuno chiamò la polizia, i biglietti furono rimborsati.",
+    comp:"Se la pubblicità sembra troppo bella per essere vera, cerca le foto reali del luogo prima di pagare." },
+  { old:true, title:"Lo specchio del cielo — Salar de Uyuni",
     desc:"Una distesa dove il cielo si riflette perfettamente sotto i piedi: le persone sembrano camminare sulle nuvole.",
     link:"https://www.google.com/search?udm=2&q=salar+de+uyuni+mirror+reflection", linkLabel:"Mostra la foto",
     answer:"VERO", why:"È la più grande distesa di sale del mondo, in Bolivia: nella stagione delle piogge un velo d'acqua la trasforma in uno specchio. Su Google Maps e in migliaia di foto di viaggiatori.",
     comp:"I luoghi veri hanno mille testimoni da mille angolazioni; i finti ne hanno uno solo." },
-  { title:"Gesù di gamberetti",
+  { old:true, title:"Gesù di gamberetti",
     desc:"Su Facebook girano immagini di Gesù fatto di gamberetti, granchi e crostacei, con migliaia di «Amen» nei commenti.",
     link:"https://www.google.com/search?udm=2&q=shrimp+jesus+AI+facebook", linkLabel:"Mostra la foto",
     answer:"AI", why:"È il simbolo dello «AI slop»: contenuti generati in serie per raccogliere like e monetizzare. Nessuna fonte, nessun autore, solo engagement.",
     comp:"Chiedersi sempre: chi l'ha pubblicato, e perché? Like e condivisioni valgono soldi." },
-  { title:"L'antilope saiga",
+  { title:"Il delfino rosa",
+    desc:"Un delfino rosa confetto nuota in un fiume dall'acqua scura. Sembra colorato al computer.",
+    link:"https://www.google.com/search?udm=2&q=amazon+pink+river+dolphin+boto", linkLabel:"Mostra la foto",
+    answer:"VERO", why:"È il boto dell'Amazzonia: gli adulti diventano rosa davvero. Lo studiano i biologi da decenni ed è il più grande delfino di fiume del mondo.",
+    comp:"«Colore impossibile» non significa falso: verificare prima di ridere." },
+  { title:"La Torre Eiffel in fiamme",
+    desc:"Gennaio 2024: la torre avvolta dal fuoco, foto e video condivisi milioni di volte con commenti disperati.",
+    link:"https://www.google.com/search?udm=2&q=eiffel+tower+fire+fake+AI", linkLabel:"Mostra le immagini",
+    answer:"AI", why:"Mai successo. Immagini generate: bastava aprire una delle webcam pubbliche di Parigi in diretta per smentirle in dieci secondi.",
+    comp:"Per i grandi monumenti esistono webcam pubbliche: la verifica costa 10 secondi." },
+  { old:true, title:"L'antilope saiga",
     desc:"Un'antilope con una proboscide gonfiabile che sembra uscita da Star Wars.",
     link:"https://www.google.com/search?udm=2&q=saiga+antelope", linkLabel:"Mostra la foto",
     answer:"VERO", why:"Vive nelle steppe del Kazakistan; il naso filtra la polvere d'estate e riscalda l'aria d'inverno. Documentata da zoologi e dal WWF.",
     comp:"«Sembra finto» non è un criterio: la natura supera l'immaginazione dei modelli." },
-  { title:"La bambina col cucciolo nell'alluvione",
+  { old:true, title:"La bambina col cucciolo nell'alluvione",
     desc:"Ottobre 2024, uragano Helene negli USA: una bambina in lacrime stringe un cucciolo su una barca. Condivisa anche da politici.",
     link:"https://www.google.com/search?udm=2&q=hurricane+helene+girl+puppy+boat+AI", linkLabel:"Mostra la foto",
     answer:"AI", why:"Le dita sono sbagliate e ne esistono più versioni leggermente diverse — prova della generazione. Chi la condivise disse: «non importa se è vera, rende l'idea». Importa.",
     comp:"Le emozioni forti spengono lo spirito critico: è proprio lì che i falsi colpiscono." },
-  { title:"Il drago blu",
+  { title:"Il pugile arcobaleno dei mari",
+    desc:"Un crostaceo con colori da cartone animato e occhi da alieno, in un acquario.",
+    link:"https://www.google.com/search?udm=2&q=peacock+mantis+shrimp", linkLabel:"Mostra la foto",
+    answer:"VERO", why:"La canocchia pavone esiste: il suo pugno accelera come un proiettile e i suoi occhi vedono colori che noi non possiamo nemmeno immaginare.",
+    comp:"La natura è più strana dell'AI: prima di votare «finto», controlla se qualcuno la studia." },
+  { title:"L'influencer in tribuna a Wimbledon",
+    desc:"Estate 2025: «Mia Zelu», influencer con centinaia di migliaia di follower, pubblica foto perfette dagli spalti del torneo.",
+    link:"https://www.google.com/search?udm=2&q=Mia+Zelu+AI+influencer+Wimbledon", linkLabel:"Mostra le foto",
+    answer:"AI", why:"Non esiste: è un'influencer interamente generata, gestita per raccogliere follower e pubblicità. Nessuno l'ha mai vista dal vivo; le sue foto non hanno mai testimoni.",
+    comp:"Profili perfetti senza vita verificabile: il vuoto intorno è l'indizio più forte." },
+  { old:true, title:"Il drago blu",
     desc:"Una creatura blu elettrico con le ali, lunga pochi centimetri, spiaggiata sulla sabbia.",
     link:"https://www.google.com/search?udm=2&q=glaucus+atlanticus+blue+dragon", linkLabel:"Mostra la foto",
     answer:"VERO", why:"È il Glaucus atlanticus, un mollusco marino che galleggia a pancia in su e mangia le velelle urticanti. Fotografato da biologi marini in tutto il mondo.",
     comp:"Verificare la fonte: se lo studiano le università, esiste." }
 ]},
 { id:"video", name:"VIDEO", icon:"🎬",
-  tile:"Sora, deepfake, ASMR di vetro — e imprese vere che sembrano impossibili.",
+  tile:"Sora, deepfake, finti salvataggi commoventi — e imprese vere che sembrano impossibili.",
   intro:"Clic sul bottone giallo: il video si apre in una nuova scheda sul tuo schermo. Bastano 20–30 secondi di visione, poi timer e voto sul foglietto.",
   items:[
-  { title:"La donna che cammina per Tokyo",
+  { old:true, title:"La donna che cammina per Tokyo",
     desc:"Una donna elegante cammina in una strada di Tokyo bagnata di neon. Video che ha fatto il giro del mondo a febbraio 2024.",
     link:"https://www.youtube.com/results?search_query=sora+openai+tokyo+woman+walking", linkLabel:"Guarda il video",
     answer:"AI", why:"È il video-demo di Sora (OpenAI). A guardare bene: le gambe a un certo punto si «scambiano», i passanti si dissolvono, le scritte sono senza senso.",
     comp:"Guardare due volte: la prima si guarda la protagonista, la seconda lo sfondo. I falsi si tradiscono ai margini." },
-  { title:"ASMR: tagliare la frutta di vetro",
+  { title:"La lucertola che corre sull'acqua",
+    desc:"Una lucertola attraversa uno stagno correndo letteralmente sulla superficie, come in un cartone animato.",
+    link:"https://www.youtube.com/results?search_query=basilisk+lizard+running+on+water", linkLabel:"Guarda il video",
+    answer:"VERO", why:"Il basilisco esiste e corre davvero sull'acqua: zampe larghissime e falcate rapidissime. Filmato dai documentaristi di BBC e National Geographic.",
+    comp:"Se un comportamento «impossibile» è filmato da più documentari seri, è biologia, non AI." },
+  { old:true, title:"ASMR: tagliare la frutta di vetro",
     desc:"Un coltello affetta una mela di vetro con un suono cristallino perfetto. Milioni di visualizzazioni su TikTok nel 2025.",
     link:"https://www.youtube.com/results?search_query=glass+fruit+cutting+asmr+ai", linkLabel:"Guarda il video",
     answer:"AI", why:"Generato con Veo 3: video e suono creati insieme dall'AI. La frutta di vetro non esiste, ma il cervello «sente» che il suono è giusto e si fida.",
     comp:"Anche l'audio ora si genera: l'orecchio non è più una prova." },
-  { title:"Il salto dallo spazio",
+  { old:true, title:"Il salto dallo spazio",
     desc:"Un uomo si lancia da una capsula a 39.000 metri di altezza e supera il muro del suono in caduta libera.",
     link:"https://www.youtube.com/results?search_query=felix+baumgartner+space+jump+red+bull+stratos", linkLabel:"Guarda il video",
     answer:"VERO", why:"Felix Baumgartner, 14 ottobre 2012: 8 milioni di persone lo guardarono in diretta streaming. Telemetria, testimoni, record certificati.",
     comp:"Gli eventi veri lasciano tracce enormi: dirette, dati, articoli dello stesso giorno." },
-  { title:"«Io non sono Morgan Freeman»",
+  { title:"Il gatto che salva il bambino",
+    desc:"Un gatto afferra al volo un bambino che sta per cadere dalle scale e lo trascina al sicuro. Milioni di like e commenti commossi.",
+    link:"https://www.youtube.com/results?search_query=ai+cat+saves+baby+fake+video", linkLabel:"Guarda il video",
+    answer:"AI", why:"Fa parte dell'ondata di finti «salvataggi di animali» generati per raccogliere visualizzazioni: movimenti di gomma, fisica sbagliata, canali senza storia che pubblicano dieci «miracoli» al giorno.",
+    comp:"Le storie perfette che fanno dire «awww» sono progettate per farti condividere senza pensare." },
+  { title:"Il polpo invisibile",
+    desc:"Un sub si avvicina a un cespuglio di alghe… che all'improvviso «esplode», cambia colore e diventa un polpo che schizza via.",
+    link:"https://www.youtube.com/results?search_query=octopus+camouflage+reveal+diver", linkLabel:"Guarda il video",
+    answer:"VERO", why:"È il mimetismo del polpo: cambia colore e perfino la consistenza della pelle in un istante. Celebre la ripresa del biologo marino Roger Hanlon, diventata virale proprio perché «sembra un trucco».",
+    comp:"Cercare l'autore: se il video ha un nome, una data e uno studio scientifico dietro, è documentazione." },
+  { old:true, title:"«Io non sono Morgan Freeman»",
     desc:"Morgan Freeman guarda in camera e dice: «Io non sono Morgan Freeman. Quello che vedete non è reale».",
     link:"https://www.youtube.com/results?search_query=deepfake+morgan+freeman+this+is+not+morgan+freeman", linkLabel:"Guarda il video",
     answer:"AI", why:"Deepfake dichiarato del collettivo olandese Diep Nep (2021), con un imitatore per la voce. Creato apposta per mostrare quanto è facile.",
     comp:"Se un volto famoso dice qualcosa di strano, cercare la fonte originale prima di crederci." },
-  { title:"Fulmini dentro il vulcano",
+  { old:true, title:"Fulmini dentro il vulcano",
     desc:"Un'eruzione notturna con fulmini che nascono dentro la colonna di cenere. Sembra un poster di un film fantasy.",
     link:"https://www.youtube.com/results?search_query=volcanic+lightning+eruption", linkLabel:"Guarda il video",
     answer:"VERO", why:"Si chiama «temporale sporco»: le particelle di cenere si caricano elettricamente sfregando tra loro. Filmato su decine di vulcani da fotografi e vulcanologi.",
     comp:"Cercare conferme indipendenti: lo stesso fenomeno, filmato da persone diverse in luoghi diversi." },
-  { title:"Il treno di luci nel cielo",
+  { title:"Le persone che negano di essere AI",
+    desc:"Interviste per strada: i passanti giurano di essere reali e si arrabbiano con chi li avrebbe «generati». Trend virale del 2025.",
+    link:"https://www.youtube.com/results?search_query=prompt+theory+veo+3", linkLabel:"Guarda il video",
+    answer:"AI", why:"È la «Prompt Theory»: tutto generato con Veo 3, persone comprese. Il trend gioca proprio sul dubbio — ma quei passanti non esistono.",
+    comp:"Quando il contenuto stesso scherza sull'essere AI, guarda chi lo pubblica e con che strumenti." },
+  { title:"Il pesce lungo otto metri",
+    desc:"Un pesce d'argento, nastriforme e lunghissimo, nuota in verticale come un fantasma davanti ai sub.",
+    link:"https://www.youtube.com/results?search_query=oarfish+sighting+diver", linkLabel:"Guarda il video",
+    answer:"VERO", why:"Il pesce remo (o «re di aringhe») esiste: vive negli abissi e risale raramente in superficie. Gli avvistamenti sono documentati dagli istituti oceanografici.",
+    comp:"Raro non significa falso: gli animali degli abissi sembrano tutti «generati»." },
+  { title:"Tom Hanks ti vende un'assicurazione dentale",
+    desc:"Ottobre 2023: sui social gira uno spot in cui Tom Hanks promuove un piano di cure dentistiche.",
+    link:"https://www.youtube.com/results?search_query=tom+hanks+AI+dental+ad+deepfake", linkLabel:"Guarda il servizio",
+    answer:"AI", why:"Hanks avvertì di persona i fan: «Non sono io: è la mia immagine creata con l'AI, senza il mio permesso». Una truffa pubblicitaria con il volto rubato.",
+    comp:"I vip non vendono miracoli nei post sponsorizzati: nove volte su dieci è un deepfake truffa." },
+  { old:true, title:"Il treno di luci nel cielo",
     desc:"Una fila perfetta di luci bianche attraversa il cielo notturno in silenzio. Migliaia di segnalazioni di «UFO».",
     link:"https://www.youtube.com/results?search_query=starlink+train+night+sky", linkLabel:"Guarda il video",
     answer:"VERO", why:"Sono i satelliti Starlink appena lanciati, ancora in fila prima di distribuirsi. Ogni «avvistamento» coincide con un lancio documentato.",
     comp:"Prima di gridare al mistero, cercare la spiegazione: le date dei lanci sono pubbliche." },
-  { title:"Il podcast dei neonati",
+  { old:true, title:"Il podcast dei neonati",
     desc:"Due bebè con le cuffie conducono un podcast e parlano da adulti. Trend enorme del 2025.",
     link:"https://www.youtube.com/results?search_query=ai+baby+podcast", linkLabel:"Guarda il video",
     answer:"AI", why:"Volti generati o animati con AI a partire da foto, voci sintetiche. Contenuto dichiaratamente assurdo, ma i canali guadagnano su ogni visualizzazione.",
     comp:"Chiedersi il perché: dietro i contenuti «senza senso» c'è quasi sempre un modello di guadagno." },
-  { title:"900 metri di parete, senza corda",
+  { title:"Il tornado di fuoco",
+    desc:"Una colonna di fiamme alta decine di metri ruota su se stessa in mezzo a un incendio.",
+    link:"https://www.youtube.com/results?search_query=fire+tornado+firenado", linkLabel:"Guarda il video",
+    answer:"VERO", why:"Il «firenado» succede davvero nei grandi incendi: l'aria caldissima che sale comincia a ruotare. Filmato da vigili del fuoco e ricercatori in tutto il mondo.",
+    comp:"Un fenomeno con un nome scientifico e studi pubblicati non è un effetto speciale." },
+  { title:"L'uomo con la testa a palloncino",
+    desc:"Un cortometraggio segue la vita di un uomo con un palloncino giallo al posto della testa.",
+    link:"https://www.youtube.com/results?search_query=air+head+shy+kids+sora", linkLabel:"Guarda il corto",
+    answer:"AI", why:"È «Air Head» dello studio canadese Shy Kids (2024), tra i primi corti girati con Sora da registi veri. Dichiarato e creativo: qui l'AI è un pennello, non un inganno.",
+    comp:"L'AI dichiarata è uno strumento creativo; il problema è quella nascosta." },
+  { old:true, title:"900 metri di parete, senza corda",
     desc:"Un uomo scala El Capitan, una parete verticale di 900 metri, senza corde né protezioni.",
     link:"https://www.youtube.com/results?search_query=alex+honnold+free+solo+el+capitan", linkLabel:"Guarda il video",
     answer:"VERO", why:"Alex Honnold, 3 giugno 2017: l'impresa del film premio Oscar «Free Solo», con troupe, testimoni e documentazione completa.",
     comp:"Chiusura del round: il «non può essere vero» non è un criterio. Vince chi verifica." }
 ]},
 { id:"testi", name:"TESTI", icon:"✍️",
-  tile:"Poesie, notizie assurde ma vere e notizie plausibili ma inventate.",
+  tile:"Poesie vere e generate, notizie assurde ma vere, notizie plausibili ma inventate.",
   intro:"Il testo appare nudo sullo schermo, senza autore né contesto. Leggilo ad alta voce una volta, poi timer e voto. (Ricorda lo studio del 2024: i lettori riconoscono le poesie AI meno del caso, 46,6%.)",
   items:[
-  { title:"Tre versi",
+  { old:true, title:"Tre versi",
     poem:"Ognuno sta solo sul cuor della terra\ntrafitto da un raggio di sole:\ned è subito sera.",
     answer:"VERO", why:"È Salvatore Quasimodo, «Ed è subito sera» (1930), premio Nobel 1959. Molti votano AI: «troppo semplice». Tre versi che contengono una vita intera.",
     comp:"La semplicità estrema è un rischio che l'AI non corre: leviga, non taglia." },
-  { title:"Altri quattro versi",
+  { old:true, title:"Altri quattro versi",
     poem:"La sera scende\ncome una mano\nche chiude gli occhi\nal mondo stanco.",
     answer:"AI", why:"Generata da un modello linguistico per questa partita. Suona bene ma non rischia nulla: immagine prevedibile, chiusura troppo rotonda, nessuno spigolo.",
     comp:"Profondità simulata: tante immagini «poetiche» accumulate non fanno una poesia." },
-  { title:"Notizia assurda",
+  { title:"Quattro versi sul mare",
+    poem:"Il mare è tutto azzurro.\nIl mare è tutto calmo.\nNel cuore è quasi un urlo\ndi gioia. E tutto è calmo.",
+    answer:"VERO", why:"È Sandro Penna, poeta del Novecento. Le ripetizioni «troppo facili» fanno votare AI — e invece sono la sua firma: dentro la calma esplode un urlo di gioia.",
+    comp:"Ripetere una parola è una scelta rischiosa; l'AI di solito «varia» per sembrare brava." },
+  { title:"Quattro versi sul cielo",
+    poem:"Il cielo è tutto chiaro.\nLa strada è tutta mia.\nNel petto un canto leggero\ndi malinconia.",
+    answer:"AI", why:"Generata per questa partita imitando lo stile di Penna. La rima «mia/malinconia» chiude troppo comoda, e la «malinconia» è l'emozione da catalogo delle poesie sintetiche.",
+    comp:"L'imitazione riproduce la forma, non il coraggio: cerca la parola che nessuno avrebbe messo lì." },
+  { old:true, title:"Notizia assurda",
     news:"«Nel 1919 a Boston un serbatoio cedette e un'ondata di melassa alta 8 metri travolse le strade a 56 km/h, uccidendo 21 persone.»",
     answer:"VERO", why:"La Grande inondazione di melassa di Boston è documentata da giornali dell'epoca, processi e libri di storia. Per decenni, nei giorni caldi, il quartiere profumava di caramello.",
     verify:"https://en.wikipedia.org/wiki/Great_Molasses_Flood",
     comp:"La realtà è spesso meno plausibile della finzione: assurdo non significa falso." },
-  { title:"Notizia plausibile",
+  { old:true, title:"Notizia plausibile",
     news:"«Il Ministero dell'Istruzione sperimenta in 50 scuole un registro elettronico che rileva gli sbadigli con la webcam per misurare il livello di attenzione in classe.»",
     answer:"AI", why:"Inventata per questa partita. Suona vera perché è costruita con pezzi veri (registro elettronico, webcam, scuole pilota). Ma se la cerchi, nessuna testata la riporta.",
-    comp:"Il metodo che non scade: cercare la notizia. Se nessuna fonte affidabile la riporta, allarme rosso." }
+    comp:"Il metodo che non scade: cercare la notizia. Se nessuna fonte affidabile la riporta, allarme rosso." },
+  { title:"Notizia assurda n. 2",
+    news:"«Nel 2009 in Sudafrica un piccione viaggiatore con una chiavetta USB legata alla zampa ha trasferito 4 GB di dati più in fretta della connessione internet dell'azienda.»",
+    answer:"VERO", why:"Il piccione Winston batté davvero la linea ADSL della compagnia Telkom: 2 ore e 7 minuti contro il 4% di download. La gara fu seguita dai giornali di mezzo mondo.",
+    verify:"https://www.google.com/search?q=winston+pigeon+faster+than+internet+2009",
+    comp:"Prima di dire «impossibile», cercare: le storie vere assurde hanno date, nomi e articoli." },
+  { title:"Notizia plausibile n. 2",
+    news:"«Una scuola media di Torino ha sostituito la campanella con playlist scelte a turno dagli studenti: i ritardi sono calati del 30%.»",
+    answer:"AI", why:"Inventata per questa partita. Perfetta per essere condivisa: scuola, musica, un numero preciso. Ma il numero preciso senza fonte è un trucco classico — cercala: non esiste.",
+    comp:"Un dato percentuale non rende vera una notizia: chiedi sempre «misurato da chi?»." },
+  { title:"Notizia assurda n. 3",
+    news:"«In Giappone una gatta è stata nominata capostazione di una stazione ferroviaria, con tanto di berretto d'ordinanza. Ha salvato la linea dal fallimento attirando milioni di turisti.»",
+    answer:"VERO", why:"La gatta Tama diresse la stazione di Kishi dal 2007: la linea, quasi fallita, fu salvata dal turismo. Alla sua morte ricevette funerali shintoisti e un titolo onorifico.",
+    verify:"https://www.google.com/search?q=tama+cat+stationmaster+kishi+station",
+    comp:"Le notizie vere strane si verificano in 30 secondi: foto d'archivio, articoli, luoghi visitabili." },
+  { title:"Notizia plausibile n. 3",
+    news:"«Dal 2027 l'Unione Europea obbligherà i produttori di smartphone a limitare le suonerie a 60 decibel sui mezzi pubblici.»",
+    answer:"AI", why:"Inventata per questa partita. Ha tutti gli ingredienti giusti (UE, una data, un numero, un fastidio che tutti conoscono) — ed è proprio questo a renderla credibile. Nessuna fonte la riporta.",
+    comp:"Più una notizia «conferma» un fastidio che già provi, più merita una verifica." }
 ]},
 { id:"musica", name:"MUSICA", icon:"🎧",
-  tile:"La canzone dei Nirvana mai scritta e la popstar che non esiste (ma non è AI).",
+  tile:"Nirvana mai scritti, Johnny Cash che canta Barbie Girl, band di cartoni e popstar ologramma.",
   intro:"Ascolto di 30–60 secondi a occhi chiusi, poi timer e voto. I brani si aprono dal bottone giallo.",
   items:[
-  { title:"La canzone «dei Nirvana»",
+  { old:true, title:"La canzone «dei Nirvana»",
     desc:"«Drowned in the Sun»: voce, chitarre e stile di Kurt Cobain, morto nel 1994. Pubblicata nel 2021.",
     link:"https://www.youtube.com/results?search_query=drowned+in+the+sun+nirvana+ai", linkLabel:"Ascolta il brano",
     answer:"AI", why:"Progetto «Lost Tapes of the 27 Club»: musica generata da un'AI addestrata sui Nirvana, cantata da un interprete, per parlare di salute mentale nei musicisti.",
     comp:"Le voci e gli stili si clonano: conta chi lo dichiara e perché lo fa." },
-  { title:"La popstar che riempie gli stadi",
+  { title:"Le voci dei Chipmunks (1958)",
+    desc:"Voci acutissime e «impossibili» che cantano in perfetta armonia: sembra un effetto digitale moderno.",
+    link:"https://www.youtube.com/results?search_query=the+chipmunk+song+1958", linkLabel:"Ascolta il brano",
+    answer:"VERO", why:"Ross Bagdasarian cantava a metà velocità e poi riproduceva il nastro al doppio: un trucco interamente analogico del 1958, premiato con tre Grammy.",
+    comp:"Le voci manipolate esistono da 70 anni: «suona strano» non dice chi (o cosa) l'ha creato." },
+  { title:"Johnny Cash canta «Barbie Girl»",
+    desc:"La voce profonda e inconfondibile di Johnny Cash (morto nel 2003) canta il tormentone degli Aqua.",
+    link:"https://www.youtube.com/results?search_query=johnny+cash+barbie+girl+ai", linkLabel:"Ascolta il brano",
+    answer:"AI", why:"Clonazione vocale del canale «There I Ruined It» (2023), dichiarata come parodia. Divertente — ma la stessa identica tecnica può mettere in bocca a chiunque qualsiasi cosa.",
+    comp:"Stessa tecnologia, usi opposti: parodia dichiarata o inganno. Cambia solo l'onestà di chi la usa." },
+  { title:"La band di cartoni animati",
+    desc:"Una band di quattro personaggi disegnati riempie i palazzetti di mezzo mondo dal 2001.",
+    link:"https://www.youtube.com/results?search_query=gorillaz+clint+eastwood", linkLabel:"Ascolta il brano",
+    answer:"VERO", why:"Sono i Gorillaz: dietro i cartoni ci sono musicisti in carne e ossa (Damon Albarn dei Blur). Personaggi inventati, musica umana al 100%.",
+    comp:"Personaggio finto ≠ musica generata: chiediti sempre che cosa, esattamente, è finto." },
+  { title:"Il disco «perduto» degli Oasis",
+    desc:"2023: esce «The Lost Tapes Vol. 1» degli AISIS — canzoni mai sentite, con la voce del giovane Liam Gallagher.",
+    link:"https://www.youtube.com/results?search_query=aisis+lost+tapes+oasis+ai", linkLabel:"Ascolta il brano",
+    answer:"AI", why:"Una band vera (Breezer) scrisse e suonò i brani, poi ci mise sopra la voce di Liam clonata con l'AI. Lo stesso Liam commentò: «Meglio di tante cose in giro». Ma nessuno gli aveva chiesto il permesso.",
+    comp:"La voce è identità: il punto non è se il risultato piace, ma chi ha dato il consenso." },
+  { old:true, title:"La popstar che riempie gli stadi",
     desc:"Una cantante con i capelli turchesi fa concerti sold-out da anni: sul palco c'è solo un ologramma, la voce è interamente sintetica.",
     link:"https://www.youtube.com/results?search_query=hatsune+miku+live+concert", linkLabel:"Guarda un concerto",
     answer:"VERO", why:"Hatsune Miku esiste dal 2007: è un software (Vocaloid) con la voce campionata da un'attrice. Niente AI generativa: ogni canzone è scritta nota per nota da autori umani.",
@@ -304,13 +422,13 @@ function renderHome(){
   app.innerHTML = `
   <div class="home">
     <div class="hero">
-      <div class="eyebrow">Partita 2 · sfida individuale · tutti esempi nuovi</div>
+      <div class="eyebrow">Partita 2 · sfida individuale</div>
       <h1 class="hero-title">AI <span class="oppure">o</span> NON AI?</h1>
-      <p class="hero-sub">${TOTAL} contenuti mai visti nella prima partita. Niente cellulari: servono solo lo schermo,
-      un foglietto e una penna a testa.</p>
+      <p class="hero-sub">${TOTAL} contenuti in 4 categorie: le sfide della volta scorsa (segnate «ripasso»)
+      più tanti esempi nuovi. Niente cellulari: servono solo lo schermo, un foglietto e una penna a testa.</p>
       <div class="hero-badges">
         <span class="pill">4 categorie</span><span class="pill">${TOTAL} sfide</span>
-        <span class="pill">Punteggio individuale</span><span class="pill">~40 minuti</span>
+        <span class="pill">Punteggio individuale</span><span class="pill">Giocabile a blocchi</span>
       </div>
     </div>
 
@@ -327,12 +445,13 @@ function renderHome(){
     <section class="home-section">
       <h2>Come si gioca</h2>
       <ol class="steps">
-        <li>Ogni studente scrive sul foglietto i numeri da <b>1 a ${TOTAL}</b> (la numerazione continua tra le categorie).</li>
+        <li>Ogni studente scrive sul foglietto i numeri delle sfide che giocherete (sono indicati su ogni carta e sulle categorie).</li>
         <li>Il conduttore mostra il contenuto — foto, video, testo o brano — con un clic sul <b>bottone giallo</b>, e avvia il <b>timer di 20 secondi</b>.</li>
         <li>Ognuno scrive <b>AI</b> oppure <b>VERO</b>. Poi si preme <b>RIVELA</b>: risposta, spiegazione e la competenza che quella sfida allena.</li>
         <li>Ci si corregge da soli (✓/✗). Alla fine, la schermata <b>Correzione</b> riepiloga tutte le risposte e assegna i livelli.</li>
       </ol>
-      <p><strong>Variante veloce (20 min):</strong> gioca solo FOTO + VIDEO, oppure una categoria a scelta della classe.</p>
+      <p><strong>Con ${TOTAL} sfide non serve giocarle tutte in una volta:</strong> scegliete una o due categorie a lezione,
+      o saltate le carte «ripasso» se le ricordate. I pallini in alto mostrano cosa avete già fatto.</p>
     </section>
 
     <section class="home-section">
@@ -357,15 +476,24 @@ function renderHome(){
       <h2>Fonti per il conduttore</h2>
       <ul class="sources">
         <li>The Guardian / BBC — «Balenciaga Pope», l'immagine Midjourney del Papa (2023)</li>
+        <li>BBC / Guardian — il flop della «Willy Wonka Experience» di Glasgow (2024)</li>
+        <li>INGV / NASA — tempesta solare e aurora visibile in Italia (maggio 2024)</li>
         <li>404 Media / Stanford — «Shrimp Jesus» e l'AI slop su Facebook (2024)</li>
         <li>AP / fact-checker — la bambina col cucciolo dell'uragano Helene è AI (2024)</li>
+        <li>Reuters / AFP — le finte immagini della Torre Eiffel in fiamme (2024)</li>
+        <li>Stampa internazionale — «Mia Zelu», l'influencer AI a Wimbledon (2025)</li>
         <li>OpenAI — video dimostrativi di Sora, «Tokyo walk» (2024)</li>
+        <li>Shy Kids — «Air Head», cortometraggio realizzato con Sora (2024)</li>
+        <li>CNN / BBC — Tom Hanks avverte del deepfake pubblicitario (2023)</li>
         <li>Diep Nep — deepfake dichiarato «This is not Morgan Freeman» (2021)</li>
         <li>Red Bull Stratos — telemetria e diretta del salto di Baumgartner (2012)</li>
         <li>National Geographic — «Free Solo», El Capitan senza corda (2017)</li>
-        <li>Rolling Stone — «Drowned in the Sun», il progetto Lost Tapes of the 27 Club (2021)</li>
+        <li>Roger Hanlon / MBL — la celebre ripresa del polpo mimetico</li>
+        <li>Rolling Stone — «Drowned in the Sun», Lost Tapes of the 27 Club (2021)</li>
+        <li>There I Ruined It — parodie con voci clonate, «Barbie Girl» di Cash (2023)</li>
+        <li>NME / BBC — AISIS, il «disco perduto» con la voce AI di Liam Gallagher (2023)</li>
         <li>Crypton Future Media — Hatsune Miku e la tecnologia Vocaloid</li>
-        <li>Wikipedia — Great Molasses Flood, Boston 1919</li>
+        <li>Wikipedia — Great Molasses Flood (1919), Winston il piccione (2009), Tama la gatta capostazione</li>
         <li>Porter &amp; Machery — studio sulle poesie AI, Scientific Reports (2024)</li>
       </ul>
     </section>
@@ -403,7 +531,7 @@ function renderQ(c,i){
   <div class="shell">
     ${topbar(c,i)}
     <div class="stage"><div class="card">
-      <div class="eyebrow">${C.icon} ${C.name} · scrivi la risposta n. ${q.num} sul foglietto</div>
+      <div class="eyebrow">${C.icon} ${C.name} · scrivi la risposta n. ${q.num} sul foglietto${q.old?`<span class="rip-tag">ripasso</span>`:""}</div>
       <h2 class="q-title">${q.title}</h2>
       ${q.desc?`<p class="q-desc">${q.desc}</p>`:""}
       ${q.poem?`<div class="poem">${esc(q.poem)}</div>`:""}
@@ -426,6 +554,7 @@ function renderQ(c,i){
       ${isRev
         ? `<button class="btn btn-acc btn-reveal" onclick="next()">${nextLabel(c,i)}</button>`
         : `<button class="btn btn-acc btn-reveal" onclick="reveal()">👁 RIVELA</button>`}
+      <button class="btn" onclick="next()" ${isRev?"disabled":""}>Salta →</button>
     </div>
   </div>`;
 }
@@ -461,11 +590,13 @@ function renderEnd(){
         <div class="key-grid">
           ${c.items.map(q=>`<div class="key-item"><span class="kn">${q.num}.</span><span class="kv ${q.answer==="AI"?"ai":"vero"}">${q.answer}</span></div>`).join("")}
         </div>`).join("")}
+      <p class="lead" style="text-align:center">I livelli valgono sulla partita completa (${TOTAL} sfide);
+      se avete giocato solo alcune categorie, contate in proporzione.</p>
       <div class="rubric">
-        <div class="rub"><div class="pts">0–8 PUNTI</div><div class="lv">🐣 Apprendista</div><p>Ti fidi dell'occhio: da oggi, fermati e verifica.</p></div>
-        <div class="rub"><div class="pts">9–13 PUNTI</div><div class="lv">🔍 Osservatore</div><p>Noti gli indizi giusti, ma qualche falso passa ancora.</p></div>
-        <div class="rub"><div class="pts">14–17 PUNTI</div><div class="lv">🕵️ Detective digitale</div><p>Occhio allenato e sano sospetto: quasi imbattibile.</p></div>
-        <div class="rub"><div class="pts">18–20 PUNTI</div><div class="lv">🏆 Caccia-falsi</div><p>Livello massimo: ora insegna il metodo ai compagni.</p></div>
+        <div class="rub"><div class="pts">0–18 PUNTI</div><div class="lv">🐣 Apprendista</div><p>Ti fidi dell'occhio: da oggi, fermati e verifica.</p></div>
+        <div class="rub"><div class="pts">19–29 PUNTI</div><div class="lv">🔍 Osservatore</div><p>Noti gli indizi giusti, ma qualche falso passa ancora.</p></div>
+        <div class="rub"><div class="pts">30–39 PUNTI</div><div class="lv">🕵️ Detective digitale</div><p>Occhio allenato e sano sospetto: quasi imbattibile.</p></div>
+        <div class="rub"><div class="pts">40–${TOTAL} PUNTI</div><div class="lv">🏆 Caccia-falsi</div><p>Livello massimo: ora insegna il metodo ai compagni.</p></div>
       </div>
       <div class="golden-box">
         <p><b>🥇 La regola d'oro:</b> gli indizi visivi sono utili oggi e inutili domani. Il metodo che non scade:
