@@ -6,6 +6,7 @@
     --acc:#ffc933; --acc-ink:#1a1405; --acc-dim:#b78d1a;
     --v-ai:#c18cff; --v-ai-bg:rgba(193,140,255,.13);
     --v-real:#3ddc97; --v-real-bg:rgba(61,220,151,.12);
+    --err:#ff7a7a;
     --shadow:0 18px 50px rgba(4,6,14,.55);
     --mono:ui-monospace,'SF Mono','Cascadia Mono','Segoe UI Mono',Menlo,Consolas,monospace;
     --sans:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
@@ -14,16 +15,16 @@
     :root{--bg:#f2f4fa;--surface:#fff;--surface2:#eaedf6;--line:#d7dcec;--ink:#161b2c;--muted:#5b6380;--faint:#8b92ad;
       --acc:#ffc933;--acc-ink:#1a1405;--acc-dim:#8a6a00;
       --v-ai:#7a3ff2;--v-ai-bg:rgba(122,63,242,.09);--v-real:#0c9e63;--v-real-bg:rgba(12,158,99,.09);
-      --shadow:0 14px 40px rgba(22,27,44,.14)}
+      --err:#d43d3d;--shadow:0 14px 40px rgba(22,27,44,.14)}
   }
   :root[data-theme="dark"]{--bg:#0f1320;--surface:#181e30;--surface2:#20273f;--line:#2c3450;--ink:#eef1fa;--muted:#9aa2bc;--faint:#6b7391;
     --acc:#ffc933;--acc-ink:#1a1405;--acc-dim:#b78d1a;
     --v-ai:#c18cff;--v-ai-bg:rgba(193,140,255,.13);--v-real:#3ddc97;--v-real-bg:rgba(61,220,151,.12);
-    --shadow:0 18px 50px rgba(4,6,14,.55)}
+    --err:#ff7a7a;--shadow:0 18px 50px rgba(4,6,14,.55)}
   :root[data-theme="light"]{--bg:#f2f4fa;--surface:#fff;--surface2:#eaedf6;--line:#d7dcec;--ink:#161b2c;--muted:#5b6380;--faint:#8b92ad;
     --acc:#ffc933;--acc-ink:#1a1405;--acc-dim:#8a6a00;
     --v-ai:#7a3ff2;--v-ai-bg:rgba(122,63,242,.09);--v-real:#0c9e63;--v-real-bg:rgba(12,158,99,.09);
-    --shadow:0 14px 40px rgba(22,27,44,.14)}
+    --err:#d43d3d;--shadow:0 14px 40px rgba(22,27,44,.14)}
 
   *{box-sizing:border-box} html,body{margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -32,109 +33,86 @@
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acc-dim);font-weight:600}
   .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:600}
 
-  .shell{min-height:100vh;display:flex;flex-direction:column}
-  .topbar{display:flex;align-items:center;gap:1rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:20}
-  .topbar .tt{font-weight:800;font-size:.95rem;white-space:nowrap}
-  .dots{display:flex;gap:.38rem;flex:1;justify-content:center;flex-wrap:wrap}
-  .dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--faint);background:transparent;padding:0}
-  .dot.done{background:var(--faint);border-color:var(--faint)}
-  .dot.cur{border-color:var(--acc);background:var(--acc)}
-  .btn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:10px;padding:.5rem .95rem;font-size:.88rem;font-weight:600}
+  .wrap{max-width:640px;margin:0 auto;padding:1.6rem 1.1rem 6rem}
+  .wrap.wide{max-width:920px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:1.8rem 1.5rem;margin-top:1rem}
+  @media (min-width:640px){.card{padding:2.2rem 2.2rem}}
+  .big-title{font-size:clamp(2rem,7vw,3.2rem);font-weight:900;letter-spacing:-.03em;line-height:1;margin:.5rem 0 .9rem;text-wrap:balance}
+  .big-title .oppure{color:var(--acc)}
+  .lead{color:var(--muted);font-size:1rem;margin:.5rem 0}
+  .lead b{color:var(--ink)}
+
+  .btn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;padding:.7rem 1.1rem;font-size:.95rem;font-weight:700}
   .btn:hover{border-color:var(--acc)}
   .btn-acc{background:var(--acc);color:var(--acc-ink);border:none;font-weight:800}
   .btn-acc:hover{filter:brightness(1.06)}
   .btn:disabled{opacity:.35;cursor:default}
-  .btn:disabled:hover{border-color:var(--line)}
+  .btn-big{width:100%;font-size:1.1rem;padding:1rem 1.2rem;border-radius:14px;margin-top:.8rem}
 
-  .stage{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1.2rem 7.5rem}
-  .card{width:100%;max-width:880px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:2.4rem 2.6rem 2.6rem}
-  @media (max-width:640px){.card{padding:1.6rem 1.3rem 2rem}}
-  .q-title{font-size:clamp(1.7rem,4.5vw,2.5rem);font-weight:900;letter-spacing:-.025em;line-height:1.08;margin:.5rem 0 .9rem;text-wrap:balance}
-  .q-desc{font-size:1.06rem;color:var(--muted);max-width:62ch;margin:0 0 1.1rem}
-  .poem{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.4rem,3.4vw,2rem);line-height:1.5;background:var(--surface2);border-radius:14px;padding:1.6rem 2rem;margin:0 0 1.2rem;white-space:pre-line;font-style:italic}
-  .newsbox{font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.5;background:var(--surface2);border-radius:14px;padding:1.4rem 1.8rem;margin:0 0 1.2rem;font-weight:600}
-  .show-link{display:inline-flex;align-items:center;gap:.7rem;background:var(--acc);color:var(--acc-ink);text-decoration:none;
-    font-weight:900;font-size:1.15rem;border-radius:14px;padding:1rem 1.6rem;margin:0 0 1.2rem}
-  .show-link:hover{filter:brightness(1.06)}
-  .show-link small{font-weight:600;font-size:.75rem;opacity:.75}
-  .vote-strip{display:flex;align-items:center;gap:.8rem;margin-top:1rem;flex-wrap:wrap}
-  .vote-opt{font-weight:900;font-size:1.15rem;letter-spacing:.04em;padding:.45rem 1.1rem;border-radius:10px;border:2px solid}
-  .o-ai{color:var(--v-ai);border-color:var(--v-ai);background:var(--v-ai-bg)}
-  .o-real{color:var(--v-real);border-color:var(--v-real);background:var(--v-real-bg)}
-  .vote-vs{font-family:var(--mono);color:var(--faint);font-size:.8rem}
-  .timer{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem;margin-left:auto;
-    border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--ink);padding:.45rem .9rem;min-width:6.5rem}
-  .timer.run{border-color:var(--acc);color:var(--acc-dim)}
-  .timer.zero{border-color:var(--v-ai);color:var(--v-ai)}
+  .mode-btns{display:grid;gap:.9rem;margin-top:1.4rem}
+  .mode-btn{text-align:left;border:1px solid var(--line);background:var(--surface2);border-radius:16px;padding:1.1rem 1.2rem;color:var(--ink)}
+  .mode-btn:hover{border-color:var(--acc)}
+  .mode-btn .m-t{font-weight:900;font-size:1.2rem}
+  .mode-btn .m-d{color:var(--muted);font-size:.88rem;margin-top:.2rem}
 
-  .reveal{margin-top:1.6rem;border-top:1px solid var(--line);padding-top:1.5rem}
-  .stamp{display:inline-block;font-size:clamp(2rem,6vw,3.2rem);font-weight:900;line-height:1;padding:.35em .5em;border:5px solid;border-radius:14px;
-    transform:rotate(-4deg);animation:stampIn .28s cubic-bezier(.2,1.6,.4,1) both;margin-bottom:1rem}
-  @keyframes stampIn{from{transform:rotate(-14deg) scale(2.1);opacity:0}to{transform:rotate(-4deg) scale(1);opacity:1}}
-  @media (prefers-reduced-motion:reduce){.stamp{animation:none}}
-  .stamp.v-ai{color:var(--v-ai);border-color:var(--v-ai);background:var(--v-ai-bg)}
-  .stamp.v-real{color:var(--v-real);border-color:var(--v-real);background:var(--v-real-bg)}
-  .reveal-block{background:var(--surface2);border-radius:12px;padding:1rem 1.2rem;margin-top:.8rem}
-  .reveal-block .label{display:block;margin-bottom:.3rem}
-  .reveal-block p{margin:0;font-size:1rem}
+  input[type=text], textarea{width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:12px;
+    color:var(--ink);font-family:inherit;font-size:1.05rem;padding:.85rem 1rem}
+  textarea{min-height:9rem;resize:vertical;font-family:var(--mono);font-size:.9rem}
 
-  .controls{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:.9rem;
-    padding:1rem 1.2rem calc(1rem + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);z-index:15}
-  .controls .btn-reveal{min-width:13rem;font-size:1.05rem;padding:.75rem 1.4rem;border-radius:12px}
-  @media (max-width:560px){.controls .btn-reveal{min-width:0;flex:1}}
+  /* quiz studente */
+  .prog{display:flex;gap:.35rem;margin:.6rem 0 1rem;flex-wrap:wrap}
+  .pg{flex:1;height:8px;border-radius:4px;background:var(--surface2);border:1px solid var(--line);min-width:14px}
+  .pg.done{background:var(--acc);border-color:var(--acc)}
+  .pg.cur{border-color:var(--acc)}
+  .q-title{font-size:clamp(1.4rem,5vw,2rem);font-weight:900;letter-spacing:-.02em;line-height:1.1;margin:.4rem 0 .7rem;text-wrap:balance}
+  .q-desc{font-size:1rem;color:var(--muted);margin:0 0 1rem}
+  .poem{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.2rem,4.5vw,1.6rem);line-height:1.5;background:var(--surface2);border-radius:14px;padding:1.2rem 1.4rem;margin:0 0 1rem;white-space:pre-line;font-style:italic}
+  .newsbox{font-size:clamp(1.05rem,3.5vw,1.25rem);line-height:1.5;background:var(--surface2);border-radius:14px;padding:1.1rem 1.3rem;margin:0 0 1rem;font-weight:600}
+  .show-link{display:inline-flex;align-items:center;gap:.6rem;background:var(--acc);color:var(--acc-ink);text-decoration:none;
+    font-weight:900;font-size:1.02rem;border-radius:12px;padding:.85rem 1.2rem;margin:0 0 1rem}
+  .show-link small{font-weight:600;font-size:.72rem;opacity:.75}
+  .ans-btns{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:1.2rem}
+  .ans-btns button{font-size:1.6rem;font-weight:900;letter-spacing:.04em;padding:1.1rem 0;border-radius:16px;border:3px solid;background:transparent}
+  .ans-btns .e-ai{color:var(--v-ai);border-color:var(--v-ai);background:var(--v-ai-bg)}
+  .ans-btns .e-vero{color:var(--v-real);border-color:var(--v-real);background:var(--v-real-bg)}
+  .ans-btns button:disabled{opacity:.45}
+  .ans-btns button.picked{outline:4px solid var(--acc);outline-offset:2px}
 
-  .center{text-align:center;max-width:720px}
-  .big-title{font-size:clamp(2.2rem,7vw,3.8rem);font-weight:900;letter-spacing:-.03em;line-height:.98;margin:.6rem 0 1rem}
-  .big-title .oppure{color:var(--acc)}
-  .center p.lead{color:var(--muted);font-size:1.02rem;text-align:left}
-  .steps{text-align:left;color:var(--muted);padding-left:1.2rem;margin:.6rem 0}
-  .steps li{margin:.45rem 0}
-  .steps b{color:var(--ink)}
+  .verdict{margin-top:1.2rem;border-top:1px solid var(--line);padding-top:1.1rem}
+  .v-flag{font-weight:900;font-size:1.3rem;margin-bottom:.4rem}
+  .v-flag.ok{color:var(--v-real)} .v-flag.ko{color:var(--err)}
+  .v-why{background:var(--surface2);border-radius:12px;padding:.9rem 1.1rem;font-size:.95rem;color:var(--muted)}
+  .v-why b{color:var(--ink)}
 
-  /* registrazione */
-  .reg-area{display:flex;gap:.7rem;margin:1.2rem 0 .8rem;flex-wrap:wrap}
-  .reg-area textarea{flex:1;min-width:240px;min-height:7.5rem;background:var(--surface2);border:1px solid var(--line);border-radius:12px;
-    color:var(--ink);font-family:inherit;font-size:1rem;padding:.8rem 1rem;resize:vertical}
-  .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0;justify-content:center}
+  /* fine test */
+  .score-big{font-size:clamp(3rem,14vw,4.5rem);font-weight:900;letter-spacing:-.03em;color:var(--acc);font-variant-numeric:tabular-nums;text-align:center;margin:.4rem 0}
+  .lv{text-align:center;font-weight:900;font-size:1.3rem;margin-bottom:1rem}
+  .codebox{background:var(--surface2);border:2px dashed var(--acc);border-radius:14px;padding:1rem 1.1rem;
+    font-family:var(--mono);font-size:1.05rem;font-weight:700;text-align:center;word-break:break-all;user-select:all;margin:.8rem 0}
+  .copied{color:var(--v-real);font-weight:700;text-align:center;min-height:1.4rem;margin:0}
+
+  /* cattedra */
+  .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
   .chip{display:inline-flex;align-items:center;gap:.45rem;background:var(--surface2);border:1px solid var(--line);border-radius:999px;
-    padding:.35rem .5rem .35rem .9rem;font-weight:600;font-size:.92rem}
+    padding:.35rem .5rem .35rem .9rem;font-weight:600;font-size:.9rem}
+  .chip .ok{color:var(--v-real);font-family:var(--mono);font-size:.75rem}
   .chip button{border:none;background:transparent;color:var(--faint);font-size:1rem;line-height:1;padding:.1rem .3rem}
-  .chip button:hover{color:var(--v-ai)}
-  .reg-count{font-family:var(--mono);font-size:.85rem;color:var(--acc-dim);margin:.4rem 0}
+  .chip button:hover{color:var(--err)}
+  .reg-count{font-family:var(--mono);font-size:.85rem;color:var(--acc-dim);margin:.5rem 0}
+  .warn{color:var(--err);font-size:.88rem;margin:.4rem 0}
 
-  /* inserimento */
-  .name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem;margin:1.4rem 0;text-align:left}
-  .name-btn{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;padding:.8rem .9rem;
-    font-weight:700;font-size:.95rem;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:.5rem}
-  .name-btn:hover{border-color:var(--acc)}
-  .name-btn .st{font-family:var(--mono);font-size:.8rem;color:var(--faint)}
-  .name-btn.done{border-color:var(--v-real);color:var(--v-real)}
-  .entry-q{font-size:1.1rem;color:var(--muted);margin:.2rem 0 1.2rem}
-  .entry-q b{color:var(--ink)}
-  .entry-btns{display:flex;gap:1rem;justify-content:center;margin:1.6rem 0}
-  .entry-btns button{font-size:2rem;font-weight:900;letter-spacing:.04em;padding:1.1rem 2.6rem;border-radius:16px;border:3px solid;background:transparent}
-  .entry-btns .e-ai{color:var(--v-ai);border-color:var(--v-ai);background:var(--v-ai-bg)}
-  .entry-btns .e-vero{color:var(--v-real);border-color:var(--v-real);background:var(--v-real-bg)}
-  .entry-btns button:hover{filter:brightness(1.15)}
-  .entry-prog{display:flex;gap:.4rem;justify-content:center;margin:1rem 0;flex-wrap:wrap}
-  .ep{width:26px;height:26px;border-radius:8px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;
-    font-family:var(--mono);font-size:.72rem;color:var(--faint)}
-  .ep.a{border-color:var(--v-ai);color:var(--v-ai);background:var(--v-ai-bg)}
-  .ep.v{border-color:var(--v-real);color:var(--v-real);background:var(--v-real-bg)}
-  .ep.c{border-color:var(--acc);color:var(--acc-dim)}
-
-  /* risultati */
-  .groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.6rem 0;text-align:left}
-  .group{background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:1.1rem 1.2rem;
-    animation:popIn .3s ease both}
+  .groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.4rem 0;text-align:left}
+  .group{background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:1.1rem 1.2rem;animation:popIn .3s ease both}
   @keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
   @media (prefers-reduced-motion:reduce){.group{animation:none}}
   .group .g-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem}
   .group .g-emoji{font-size:1.8rem}
-  .group .g-name{font-weight:900;font-size:1.2rem;letter-spacing:-.01em}
+  .group .g-name{font-weight:900;font-size:1.2rem}
   .group ul{margin:.2rem 0 .6rem;padding-left:1.2rem}
   .group li{margin:.2rem 0;font-weight:600}
   .group .g-sim{font-family:var(--mono);font-size:.72rem;color:var(--faint)}
+  .row{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem}
+  .row .btn{flex:1;min-width:9rem}
 </style>
 
 <div id="app"></div>
@@ -145,19 +123,19 @@
 const Q = [
  { cat:"📷 FOTO", title:"Il Papa col piumino bianco",
    desc:"Marzo 2023: Papa Francesco in un piumino oversize da rapper.",
-   link:"https://www.google.com/search?udm=2&q=pope+francis+white+puffer+jacket+AI", linkLabel:"Mostra la foto",
+   link:"https://www.google.com/search?udm=2&q=pope+francis+white+puffer+jacket+AI", linkLabel:"Guarda la foto",
    answer:"AI", why:"Generata con Midjourney: occhiali fusi con l'ombra, mano che impugna male la borraccia." },
  { cat:"📷 FOTO", title:"L'aurora boreale… sull'Italia",
    desc:"Maggio 2024: cieli rosa e viola fotografati dalle Alpi fino alla Puglia.",
-   link:"https://www.google.com/search?udm=2&q=aurora+boreale+italia+maggio+2024", linkLabel:"Mostra le foto",
+   link:"https://www.google.com/search?udm=2&q=aurora+boreale+italia+maggio+2024", linkLabel:"Guarda le foto",
    answer:"VERO", why:"La tempesta solare più forte da 20 anni: migliaia di testimoni la stessa notte." },
  { cat:"📷 FOTO", title:"La «Willy Wonka Experience» di Glasgow",
    desc:"Febbraio 2024: locandine da sogno per un evento «immersivo», biglietti fino a 35 sterline.",
-   link:"https://www.google.com/search?udm=2&q=willy+wonka+experience+glasgow+AI", linkLabel:"Mostra le immagini",
+   link:"https://www.google.com/search?udm=2&q=willy+wonka+experience+glasgow+AI", linkLabel:"Guarda le immagini",
    answer:"AI", why:"Locandine generate con AI (scritte tipo «catgacating»); dentro, un capannone quasi vuoto." },
  { cat:"📷 FOTO", title:"L'antilope saiga",
    desc:"Un'antilope con una proboscide gonfiabile che sembra uscita da Star Wars.",
-   link:"https://www.google.com/search?udm=2&q=saiga+antelope", linkLabel:"Mostra la foto",
+   link:"https://www.google.com/search?udm=2&q=saiga+antelope", linkLabel:"Guarda la foto",
    answer:"VERO", why:"Vive nelle steppe del Kazakistan; documentata da zoologi e dal WWF." },
  { cat:"🎬 VIDEO", title:"Il gatto che salva il bambino",
    desc:"Un gatto afferra al volo un bambino che sta per cadere dalle scale. Milioni di like.",
@@ -190,7 +168,6 @@ const Q = [
    answer:"AI", why:"Clonazione vocale dichiarata come parodia («There I Ruined It», 2023)." }
 ];
 const NQ = Q.length;
-
 const ANIMALS = [
  ["🦁","Leoni"],["🦄","Unicorni"],["🦌","Gazzelle"],["🦅","Aquile"],
  ["🦊","Volpi"],["🐬","Delfini"],["🐆","Ghepardi"],["🦉","Gufi"],
@@ -198,176 +175,189 @@ const ANIMALS = [
 ];
 
 /* ---------- stato ---------- */
-const SKEY = "ainonai-gruppi";
-let S = { phase:"reg", students:[], qi:0, revealed:{}, groups:null };
-try{
-  const saved = JSON.parse(localStorage.getItem(SKEY));
-  if(saved && Array.isArray(saved.students)) S = saved;
-}catch(e){}
-let entry = null; // {si, qi} durante l'inserimento
-let timerId=null, timerLeft=0;
+const SKEY = "ainonai-quiz-v2";
+let S = { mode:null, name:"", qi:0, answers:[], teacher:{students:[], groups:null} };
+try{ const sv=JSON.parse(localStorage.getItem(SKEY)); if(sv && typeof sv==="object" && "mode" in sv) S=sv; }catch(e){}
 const app = document.getElementById("app");
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 function save(){ try{ localStorage.setItem(SKEY, JSON.stringify(S)); }catch(e){} }
 
-function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
-function startTimer(){
-  stopTimer(); timerLeft=20; paintTimer();
-  timerId=setInterval(()=>{ timerLeft--; paintTimer(); if(timerLeft<=0) stopTimer(); },1000);
-}
-function paintTimer(){
-  const el=document.getElementById("timer"); if(!el) return;
-  el.textContent = timerLeft>0 ? "⏱ "+String(timerLeft).padStart(2,"0")+" s" : "⏱ STOP ✋";
-  el.className = "timer "+(timerLeft>0?"run":"zero");
-}
-
-/* ---------- render ---------- */
 function render(){
-  stopTimer();
-  if(S.phase==="reg") renderReg();
-  else if(S.phase==="quiz") renderQuiz();
-  else if(S.phase==="entry") entry ? renderEntryStudent() : renderEntryList();
-  else if(S.phase==="results") renderResults();
+  if(S.mode==="student") renderStudent();
+  else if(S.mode==="teacher") renderTeacher();
+  else renderStart();
   window.scrollTo(0,0);
 }
 
-function renderReg(){
+/* ---------- start ---------- */
+function renderStart(){
   app.innerHTML = `
-  <div class="shell"><div class="stage">
-    <div class="card center">
-      <div class="eyebrow">Quiz dei Gruppi · per formare 7–8 squadre da 3–4</div>
+  <div class="wrap">
+    <div class="card" style="text-align:center">
+      <div class="eyebrow">Quiz dei Gruppi · 12 domande</div>
       <h1 class="big-title">AI <span class="oppure">o</span> NON AI?</h1>
-      <p class="lead">Chi risponde in modo simile finisce nello stesso gruppo. Come funziona:</p>
-      <ol class="steps">
-        <li><b>Registrazione:</b> scrivi qui sotto i nomi dei ragazzi (uno per riga) e premi «Aggiungi».</li>
-        <li><b>Quiz:</b> ${NQ} sfide sullo schermo. Ognuno numera un foglietto da 1 a ${NQ} e scrive <b>AI</b> o <b>VERO</b>.</li>
-        <li><b>Inserimento:</b> a fine quiz, ognuno viene allo schermo col foglietto e inserisce le sue risposte (${NQ} tocchi, 20 secondi a testa).</li>
-        <li><b>Gruppi:</b> l'algoritmo accoppia chi ha risposto in modo più simile e dà a ogni gruppo un animale.</li>
-      </ol>
-      <div class="reg-area">
-        <textarea id="names" placeholder="Un nome per riga…&#10;Giulia&#10;Marco&#10;Sofia"></textarea>
-        <button class="btn btn-acc" onclick="addNames()">Aggiungi ↵</button>
+      <p class="lead">Fai il test sul tuo telefono: alla fine ottieni un <b>codice risultato</b> da mandare al prof.
+      Chi risponde in modo simile finisce nello stesso gruppo.</p>
+      <div class="mode-btns">
+        <button class="mode-btn" onclick="S.mode='student';save();render()">
+          <div class="m-t">📱 Sono uno studente</div>
+          <div class="m-d">Scrivi il tuo nome, rispondi alle 12 domande, invia il codice al prof.</div>
+        </button>
+        <button class="mode-btn" onclick="S.mode='teacher';save();render()">
+          <div class="m-t">🖥️ Cattedra (prof)</div>
+          <div class="m-d">Incolla i codici ricevuti dai ragazzi e crea i gruppi.</div>
+        </button>
       </div>
-      <div class="reg-count">${S.students.length} iscritti ${S.students.length?`· si formeranno ${groupSizes(S.students.length).length} gruppi da ${Math.min(...groupSizes(S.students.length))}–${Math.max(...groupSizes(S.students.length))}`:""}</div>
-      <div class="chips">${S.students.map((st,k)=>`<span class="chip">${esc(st.name)}<button aria-label="Rimuovi ${esc(st.name)}" onclick="removeName(${k})">✕</button></span>`).join("")}</div>
     </div>
-  </div>
-  <div class="controls">
-    ${S.students.length?`<button class="btn" onclick="resetAll()">Svuota tutto</button>`:""}
-    <button class="btn btn-acc btn-reveal" onclick="startQuiz()" ${S.students.length<6?"disabled":""}>Inizia il quiz →</button>
-  </div></div>`;
+  </div>`;
 }
 
-function renderQuiz(){
-  const i=S.qi, q=Q[i], isRev=!!S.revealed[i];
-  const vClass = q.answer==="AI"?"v-ai":"v-real";
+/* ---------- studente ---------- */
+function renderStudent(){
+  if(!S.name) return renderName();
+  if(S.qi < NQ) return renderQuestion();
+  renderDone();
+}
+function renderName(){
   app.innerHTML = `
-  <div class="shell">
-    <div class="topbar">
-      <button class="btn" onclick="S.phase='reg';save();render()">☰ Iscritti</button>
-      <span class="tt">Domanda ${i+1} di ${NQ}</span>
-      <div class="dots">${Q.map((_,k)=>`<button class="dot${S.revealed[k]?" done":""}${k===i?" cur":""}" aria-label="Domanda ${k+1}" onclick="S.qi=${k};save();render()"></button>`).join("")}</div>
-      <button id="timer" class="timer" onclick="startTimer()">⏱ 20 s</button>
+  <div class="wrap">
+    <div class="card">
+      <div class="eyebrow">Iscrizione</div>
+      <h1 class="big-title">Come ti chiami?</h1>
+      <p class="lead">Nome e iniziale del cognome bastano (es. <b>Giulia R.</b>). Poi rispondi da solo: niente aiutini… anche se sappiamo che copierete 😏</p>
+      <input type="text" id="nm" maxlength="30" placeholder="Il tuo nome…" autocomplete="off">
+      <button class="btn btn-acc btn-big" onclick="setName()">Inizia il test →</button>
+      <button class="btn btn-big" onclick="S.mode=null;save();render()">← Indietro</button>
     </div>
-    <div class="stage"><div class="card">
-      <div class="eyebrow">${q.cat} · scrivi la risposta n. ${i+1} sul foglietto</div>
+  </div>`;
+  const inp=document.getElementById("nm");
+  inp.focus();
+  inp.addEventListener("keydown",e=>{ if(e.key==="Enter") setName(); });
+}
+function setName(){
+  const v=document.getElementById("nm").value.trim();
+  if(!v) return;
+  S.name=v; S.qi=0; S.answers=[]; save(); render();
+}
+function renderQuestion(){
+  const i=S.qi, q=Q[i], picked=S.answers[i];
+  app.innerHTML = `
+  <div class="wrap">
+    <div class="card">
+      <div class="eyebrow">${q.cat} · domanda ${i+1} di ${NQ} · ${esc(S.name)}</div>
+      <div class="prog">${Q.map((_,k)=>`<span class="pg${S.answers[k]?" done":k===i?" cur":""}"></span>`).join("")}</div>
       <h2 class="q-title">${q.title}</h2>
       ${q.desc?`<p class="q-desc">${q.desc}</p>`:""}
       ${q.poem?`<div class="poem">${esc(q.poem)}</div>`:""}
       ${q.news?`<div class="newsbox">${q.news}</div>`:""}
       ${q.link?`<a class="show-link" href="${esc(q.link)}" target="_blank" rel="noopener">▶ ${q.linkLabel} <small>(nuova scheda)</small></a>`:""}
-      <div class="vote-strip">
-        <span class="label">Sul foglietto</span>
-        <span class="vote-opt o-ai">AI</span><span class="vote-vs">oppure</span><span class="vote-opt o-real">VERO</span>
+      <div class="ans-btns">
+        <button class="e-ai${picked==="AI"?" picked":""}" onclick="pick('AI')" ${picked?"disabled":""}>AI</button>
+        <button class="e-vero${picked==="VERO"?" picked":""}" onclick="pick('VERO')" ${picked?"disabled":""}>VERO</button>
       </div>
-      ${isRev?`
-      <div class="reveal">
-        <span class="stamp ${vClass}">${q.answer}</span>
-        <div class="reveal-block"><span class="label">Perché</span><p>${q.why}</p></div>
+      ${picked?`
+      <div class="verdict">
+        <div class="v-flag ${picked===q.answer?"ok":"ko"}">${picked===q.answer?"✔ Giusto!":"✘ Era "+q.answer}</div>
+        <div class="v-why"><b>Perché:</b> ${q.why}</div>
+        <button class="btn btn-acc btn-big" onclick="S.qi++;save();render()">${i<NQ-1?"Prossima domanda →":"Vedi il risultato →"}</button>
       </div>`:""}
-    </div></div>
-    <div class="controls">
-      <button class="btn" onclick="if(S.qi>0){S.qi--;save();render()}">← Indietro</button>
-      ${isRev
-        ? `<button class="btn btn-acc btn-reveal" onclick="quizNext()">${i<NQ-1?"Prossima domanda →":"Inserimento risposte →"}</button>`
-        : `<button class="btn btn-acc btn-reveal" onclick="S.revealed[${i}]=true;save();render()">👁 RIVELA</button>`}
     </div>
   </div>`;
 }
-function quizNext(){
-  if(S.qi<NQ-1){ S.qi++; } else { S.phase="entry"; }
-  save(); render();
+function pick(v){ if(S.answers[S.qi]) return; S.answers[S.qi]=v; save(); render(); }
+
+function myCode(){
+  return S.name.trim()+"-"+S.answers.map(a=>a==="AI"?"A":"V").join("");
+}
+function renderDone(){
+  const score=S.answers.reduce((a,v,k)=>a+(v===Q[k].answer?1:0),0);
+  const lv = score<=4?"🐣 Apprendista": score<=7?"🔍 Osservatore": score<=10?"🕵️ Detective digitale":"🏆 Caccia-falsi";
+  app.innerHTML = `
+  <div class="wrap">
+    <div class="card">
+      <div class="eyebrow" style="text-align:center">Test completato, ${esc(S.name)}!</div>
+      <div class="score-big">${score}/${NQ}</div>
+      <div class="lv">${lv}</div>
+      <p class="lead" style="text-align:center"><b>Ultimo passo:</b> manda questo codice al prof
+      (chat di classe o mostraglielo). Serve per formare i gruppi.</p>
+      <div class="codebox" id="code">${esc(myCode())}</div>
+      <p class="copied" id="copied"></p>
+      <button class="btn btn-acc btn-big" onclick="copyCode()">📋 Copia il codice</button>
+      <button class="btn btn-big" onclick="if(confirm('Rifare il test cancella le tue risposte. Sicuro?')){S.name='';S.qi=0;S.answers=[];save();render()}">↺ Rifai il test</button>
+    </div>
+  </div>`;
+}
+function copyCode(){
+  const t=myCode(), el=document.getElementById("copied");
+  const done=()=>{ el.textContent="Copiato! Ora incollalo nella chat ✔"; };
+  if(navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(t).then(done).catch(()=>{ selectCode(); });
+  else selectCode();
+  function selectCode(){
+    const r=document.createRange(); r.selectNodeContents(document.getElementById("code"));
+    const s=getSelection(); s.removeAllRanges(); s.addRange(r);
+    el.textContent="Tieni premuto sul codice e scegli «Copia»";
+  }
 }
 
-function renderEntryList(){
-  const done = S.students.filter(st=>st.answers && st.answers.length===NQ && st.answers.every(a=>a)).length;
+/* ---------- cattedra ---------- */
+function parseCodes(text){
+  const out=[];
+  text.split(/\n/).forEach(line=>{
+    const m=line.match(/([AV]{12})(?![AV])/i);
+    if(!m) return;
+    const code=m[1].toUpperCase();
+    let name=line.replace(m[1],"").replace(/[-:·,;|>]+/g," ").replace(/\s+/g," ").trim();
+    name=name.replace(/^\[.*?\]\s*/,"");
+    if(!name) name="Anonimo";
+    out.push({name, answers:code.split("").map(c=>c==="A"?"AI":"VERO")});
+  });
+  return out;
+}
+function addCodes(){
+  const ta=document.getElementById("codes");
+  const found=parseCodes(ta.value);
+  found.forEach(st=>{
+    const k=S.teacher.students.findIndex(x=>x.name.toLowerCase()===st.name.toLowerCase());
+    if(k>=0) S.teacher.students[k]=st; else S.teacher.students.push(st);
+  });
+  ta.value=""; S.teacher.groups=null; save(); render();
+}
+function renderTeacher(){
+  if(S.teacher.groups) return renderResults();
+  const n=S.teacher.students.length;
+  const sizes=n?groupSizes(n):[];
   app.innerHTML = `
-  <div class="shell"><div class="stage">
-    <div class="card center">
-      <div class="eyebrow">Inserimento risposte · ${done}/${S.students.length} completati</div>
-      <h1 class="big-title">Vieni allo schermo col foglietto</h1>
-      <p class="lead">Uno alla volta: tocca il tuo nome e inserisci le tue ${NQ} risposte (bastano ${NQ} tocchi).
-      Il verde ✓ indica chi ha finito.</p>
-      <div class="name-grid">
-        ${S.students.map((st,k)=>{
-          const ok = st.answers && st.answers.length===NQ && st.answers.every(a=>a);
-          return `<button class="name-btn${ok?" done":""}" onclick="startEntry(${k})">${esc(st.name)}<span class="st">${ok?"✓":"—"}</span></button>`;
-        }).join("")}
+  <div class="wrap wide">
+    <div class="card">
+      <div class="eyebrow">Cattedra · raccolta codici</div>
+      <h1 class="big-title">Incolla i codici dei ragazzi</h1>
+      <p class="lead">Copia i messaggi dalla chat di classe e incollali qui sotto, tutti insieme: la pagina trova da sola
+      le righe tipo <b>Marco-AVVAVAVVAVAV</b> e ignora il resto.</p>
+      <textarea id="codes" placeholder="Marco-AVVAVAVVAVAV&#10;Giulia R.-VAVAVVAVAVAV&#10;…"></textarea>
+      <button class="btn btn-acc btn-big" onclick="addCodes()">Aggiungi codici ↵</button>
+      <div class="reg-count">${n} iscritti${n?` · si formeranno ${sizes.length} gruppi da ${Math.min(...sizes)}–${Math.max(...sizes)}`:""}</div>
+      <div class="chips">${S.teacher.students.map((st,k)=>`<span class="chip">${esc(st.name)} <span class="ok">✓</span><button aria-label="Rimuovi ${esc(st.name)}" onclick="S.teacher.students.splice(${k},1);save();render()">✕</button></span>`).join("")}</div>
+      ${n>0 && n<6 ? `<p class="warn">Servono almeno 6 iscritti per formare i gruppi.</p>`:""}
+      <div class="row">
+        <button class="btn" onclick="S.mode=null;save();render()">← Inizio</button>
+        ${n?`<button class="btn" onclick="if(confirm('Cancellare tutti i codici raccolti?')){S.teacher.students=[];S.teacher.groups=null;save();render()}">Svuota</button>`:""}
+        <button class="btn btn-acc" onclick="makeGroups()" ${n<6?"disabled":""}>🎉 Crea i gruppi →</button>
       </div>
     </div>
-  </div>
-  <div class="controls">
-    <button class="btn" onclick="S.phase='quiz';save();render()">← Torna al quiz</button>
-    <button class="btn btn-acc btn-reveal" onclick="makeGroups()" ${done<S.students.length?"disabled":""}>
-      ${done<S.students.length?`Mancano ${S.students.length-done} risposte`:"🎉 Crea i gruppi →"}</button>
-  </div></div>`;
+  </div>`;
 }
 
-function startEntry(si){ entry={si, qi:0}; render(); }
-function renderEntryStudent(){
-  const st=S.students[entry.si], q=Q[entry.qi];
-  const cur = st.answers||[];
-  app.innerHTML = `
-  <div class="shell"><div class="stage">
-    <div class="card center">
-      <div class="eyebrow">Risposte di</div>
-      <h1 class="big-title">${esc(st.name)}</h1>
-      <div class="entry-prog">${Q.map((_,k)=>{
-        const a=cur[k];
-        return `<span class="ep${a==="AI"?" a":a==="VERO"?" v":""}${k===entry.qi?" c":""}">${k+1}</span>`;
-      }).join("")}</div>
-      <p class="entry-q">Domanda <b>${entry.qi+1}</b>: ${q.cat} — <b>${q.title}</b><br>Cosa hai scritto sul foglietto?</p>
-      <div class="entry-btns">
-        <button class="e-ai" onclick="setAns('AI')">AI</button>
-        <button class="e-vero" onclick="setAns('VERO')">VERO</button>
-      </div>
-    </div>
-  </div>
-  <div class="controls">
-    <button class="btn" onclick="entryBack()">← Correggi</button>
-    <button class="btn" onclick="entry=null;render()">Annulla</button>
-  </div></div>`;
-}
-function setAns(v){
-  const st=S.students[entry.si];
-  if(!st.answers) st.answers=[];
-  st.answers[entry.qi]=v;
-  if(entry.qi<NQ-1){ entry.qi++; save(); render(); }
-  else { entry=null; save(); render(); }
-}
-function entryBack(){ if(entry.qi>0){ entry.qi--; render(); } }
-
-/* ---------- gruppi ---------- */
 function groupSizes(n){
   const g=Math.max(1,Math.ceil(n/4));
   const base=Math.floor(n/g), rem=n%g;
-  const sizes=[];
-  for(let k=0;k<g;k++) sizes.push(base+(k<rem?1:0));
+  const sizes=[]; for(let k=0;k<g;k++) sizes.push(base+(k<rem?1:0));
   return sizes.sort((a,b)=>b-a);
 }
 function sim(a,b){ let s=0; for(let k=0;k<NQ;k++) if(a[k]&&a[k]===b[k]) s++; return s; }
 function makeGroups(){
-  const idx=[...S.students.keys()];
+  const ST=S.teacher.students;
+  const idx=[...ST.keys()];
   for(let k=idx.length-1;k>0;k--){ const j=Math.floor(Math.random()*(k+1)); [idx[k],idx[j]]=[idx[j],idx[k]]; }
   const sizes=groupSizes(idx.length);
   const unassigned=new Set(idx);
@@ -375,77 +365,47 @@ function makeGroups(){
   sizes.forEach(size=>{
     const seed=unassigned.values().next().value;
     unassigned.delete(seed);
-    const rest=[...unassigned].map(k=>({k, s:sim(S.students[seed].answers, S.students[k].answers)}))
+    const rest=[...unassigned].map(k=>({k, s:sim(ST[seed].answers, ST[k].answers)}))
       .sort((a,b)=>b.s-a.s).slice(0,size-1);
     rest.forEach(r=>unassigned.delete(r.k));
     const members=[seed,...rest.map(r=>r.k)];
     let common=0;
     for(let qk=0;qk<NQ;qk++){
-      const first=S.students[members[0]].answers[qk];
-      if(first && members.every(m=>S.students[m].answers[qk]===first)) common++;
+      const first=ST[members[0]].answers[qk];
+      if(first && members.every(m=>ST[m].answers[qk]===first)) common++;
     }
     groups.push({members, common});
   });
   groups.sort((a,b)=>b.common-a.common);
-  S.groups=groups; S.phase="results"; save(); render();
+  S.teacher.groups=groups; save(); render();
 }
 
 function renderResults(){
+  const ST=S.teacher.students, G=S.teacher.groups;
   app.innerHTML = `
-  <div class="shell"><div class="stage">
-    <div class="card center" style="max-width:920px">
-      <div class="eyebrow">Risultato · ${S.groups.length} gruppi</div>
+  <div class="wrap wide">
+    <div class="card" style="text-align:center">
+      <div class="eyebrow">Risultato · ${G.length} gruppi</div>
       <h1 class="big-title">Ecco le squadre! 🎉</h1>
-      <p class="lead" style="text-align:center">Formate per somiglianza di risposte: chi la pensa uguale sui falsi, lavora insieme.</p>
+      <p class="lead" style="text-align:center">Formate per somiglianza di risposte.</p>
       <div class="groups">
-        ${S.groups.map((g,gi)=>{
+        ${G.map((g,gi)=>{
           const [emoji,name]=ANIMALS[gi%ANIMALS.length];
-          return `<div class="group" style="animation-delay:${gi*0.12}s">
+          return `<div class="group" style="animation-delay:${gi*0.1}s">
             <div class="g-head"><span class="g-emoji">${emoji}</span><span class="g-name">${name}</span></div>
-            <ul>${g.members.map(m=>`<li>${esc(S.students[m].name)}</li>`).join("")}</ul>
+            <ul>${g.members.map(m=>`<li>${esc(ST[m].name)}</li>`).join("")}</ul>
             <div class="g-sim">d'accordo su ${g.common}/${NQ} domande</div>
           </div>`;
         }).join("")}
       </div>
+      <div class="row">
+        <button class="btn" onclick="S.teacher.groups=null;save();render()">← Codici</button>
+        <button class="btn" onclick="makeGroups()">🎲 Rimescola</button>
+        <button class="btn btn-acc" onclick="if(confirm('Nuova partita: cancella codici e gruppi. Sicuro?')){S.teacher={students:[],groups:null};save();render()}">↺ Nuova partita</button>
+      </div>
     </div>
-  </div>
-  <div class="controls">
-    <button class="btn" onclick="S.phase='entry';save();render()">← Risposte</button>
-    <button class="btn" onclick="makeGroups()">🎲 Rimescola</button>
-    <button class="btn btn-acc btn-reveal" onclick="resetGame()">↺ Nuova partita</button>
-  </div></div>`;
+  </div>`;
 }
 
-/* ---------- azioni ---------- */
-function addNames(){
-  const ta=document.getElementById("names");
-  const names=ta.value.split(/\n|,|;/).map(s=>s.trim()).filter(Boolean);
-  names.forEach(nm=>{
-    if(!S.students.some(st=>st.name.toLowerCase()===nm.toLowerCase()))
-      S.students.push({name:nm, answers:[]});
-  });
-  ta.value=""; save(); render();
-}
-function removeName(k){ S.students.splice(k,1); save(); render(); }
-function startQuiz(){ S.phase="quiz"; S.qi=0; save(); render(); }
-function resetGame(){
-  S.students.forEach(st=>st.answers=[]);
-  S.phase="reg"; S.qi=0; S.revealed={}; S.groups=null; save(); render();
-}
-function resetAll(){
-  if(!confirm("Cancellare tutti gli iscritti e ricominciare da zero?")) return;
-  S={phase:"reg",students:[],qi:0,revealed:{},groups:null}; save(); render();
-}
-
-document.addEventListener("keydown", e=>{
-  if(S.phase!=="quiz" || e.target.tagName==="TEXTAREA") return;
-  if(e.key==="t"||e.key==="T"){ startTimer(); return; }
-  if(e.key===" "||e.key==="Enter"){
-    e.preventDefault();
-    if(!S.revealed[S.qi]){ S.revealed[S.qi]=true; save(); render(); } else quizNext();
-  }
-  else if(e.key==="ArrowRight"){ e.preventDefault(); quizNext(); }
-  else if(e.key==="ArrowLeft"){ e.preventDefault(); if(S.qi>0){S.qi--;save();render();} }
-});
 render();
 </script>
