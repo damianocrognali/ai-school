@@ -49,6 +49,10 @@
   .btn:disabled{opacity:.35;cursor:default}
   .btn-big{width:100%;font-size:1.1rem;padding:1rem 1.2rem;border-radius:14px;margin-top:.8rem}
 
+  .qr-home{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin:1.2rem 0 .2rem}
+  .qr-home img{border-radius:12px;background:#fff;padding:6px;border:1px solid var(--line)}
+  .qr-cap{font-size:.85rem;color:var(--muted)}
+  .qr-cap b{font-family:var(--mono);font-size:.75rem;color:var(--acc-dim)}
   .mode-btns{display:grid;gap:.9rem;margin-top:1.4rem}
   .mode-btn{text-align:left;border:1px solid var(--line);background:var(--surface2);border-radius:16px;padding:1.1rem 1.2rem;color:var(--ink)}
   .mode-btn:hover{border-color:var(--acc)}
@@ -198,6 +202,10 @@ function renderStart(){
       <h1 class="big-title">AI <span class="oppure">o</span> NON AI?</h1>
       <p class="lead">Fai il test sul tuo telefono: alla fine ottieni un <b>codice risultato</b> da mandare al prof.
       Chi risponde in modo simile finisce nello stesso gruppo.</p>
+      <div class="qr-home">
+        <img src="data:image/png;base64,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" alt="QR code del quiz" width="230" height="230">
+        <div class="qr-cap">Inquadra col telefono per giocare<br><b>damianocrognali.github.io/ai-school/gruppi.html</b></div>
+      </div>
       <div class="mode-btns">
         <button class="mode-btn" onclick="S.mode='student';save();render()">
           <div class="m-t">📱 Sono uno studente</div>
